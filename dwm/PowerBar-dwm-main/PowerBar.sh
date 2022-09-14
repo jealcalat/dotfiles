@@ -83,7 +83,7 @@ updates() {
 }
 
 process(){
-  cpu="$(ps -eo pcpu | awk 'BEGIN {sum=0.0f} {sum+=$1} END {print sum}')"
+  cpu=$(grep -o "^[^ ]*" /proc/loadavg)
   printf "%s%s" "$(echo -e $powerline_s)" "$(echo -e " " $cpu'%')"
 }
 
@@ -200,7 +200,7 @@ batteries_t480() {
 ## Wi-fi
 wlan() {
 	case "$(cat /sys/class/net/w*/operstate 2>/dev/null)" in
-		up) printf "$powerline_s  %s%s" " Connected " ;;
+		up) printf "$powerline_s  %s%s" "Connected" ;;
 		down) printf "$powerline_s 睊 %s";;
 	esac
 }
@@ -213,9 +213,9 @@ get_bluetooth(){
 
     if [ "$status" == "active" ]
     then
-        echo "$BLUETOOTH_ON_ICON"
+        echo "$powerline_s $BLUETOOTH_ON_ICON"
     else
-        echo "$BLUETOOTH_OFF_ICON"
+        echo "$powerline_s $BLUETOOTH_OFF_ICON"
     fi
 }
 
