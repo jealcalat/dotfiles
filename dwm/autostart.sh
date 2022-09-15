@@ -31,8 +31,8 @@ hsetroot -cover /usr/share/archcraft/dwm/wallpapers/dwm_7.png
 # Lauch dwmbarR
 # /usr/share/archcraft/dwm/bin/dwmbar.sh &
 # use custom bar
-/home/mrrobot/Documents/GitHub/dotfiles/dwmbar_desktop.sh &
-# /home/mrrobot/go/bin/gods &&
+/home/mrrobot/Documents/GitHub/dotfiles/dwm/dwmbar_desktop.sh &
+
 # Lauch notification daemon
 /usr/share/archcraft/dwm/bin/dwmdunst.sh
 
@@ -47,6 +47,8 @@ wmname "LG3D"
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 ## Add your autostart programs here --------------
+
+/usr/bin/sxhkd -c /home/mrrobot/.config/dwm/sxhkdrc &
 
 ## -----------------------------------------------
 

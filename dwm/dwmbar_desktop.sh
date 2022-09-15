@@ -223,6 +223,6 @@ dwm_spotify () {
 while true; do
   [ "$interval" == 0 ] || [ $(("$interval" % 3600)) == 0 ] && updates=$(updates)
   interval=$((interval + 1))
-
-  sleep 1 && xsetroot -name "$(dwm_spotify) $(dwm_networkmanager) $(updates) $(dwm_resources) $(get_cputemp) $(clock) $(dwm_alsa)"
+  xsetroot -name "$(dwm_spotify) $(dwm_networkmanager) $(updates) $(dwm_resources) $(get_cputemp) $(clock) $(dwm_alsa)"
+  sleep 1
 done
