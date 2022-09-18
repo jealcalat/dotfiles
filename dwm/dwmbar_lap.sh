@@ -95,11 +95,19 @@ battery1() {
 IDENTIFIER="unicode"
 dwm_spotify () {
     if ps -C spotify > /dev/null; then
-        ARTIST=$(playerctl -p spotify metadata artist)
-        TRACK=$(playerctl -p spotify metadata title)
-        TRACK_LEN=$(expr length $TRACK)
-        DURATION=$(playerctl -p spotify metadata mpris:length | sed 's/.\{6\}$//')
-        STATUS=$(playerctl -p spotify status)
+        PLAYER="spotify"
+    elif ps -C spotifyd > /dev/null; then
+        PLAYER="spotifyd"
+    elif ps -C ncspot > /dev/null; then
+		PLAYER="ncspot"
+    fi
+
+    if [ "$PLAYER" = "spotify" ] || [ "$PLAYER" = "spotifyd" ] || [ "$PLAYER" = "ncspot" ]; then
+        ARTIST=$(playerctl -p $PLAYER  metadata artist)
+        TRACK=$(playerctl -p $PLAYER  metadata title)
+        DURATION=$(playerctl -p $PLAYER  metadata mpris:length | sed 's/.\{6\}$//')
+		POSITION=$(playerctl position | sed 's/..\{6\}$//')
+        STATUS=$(playerctl status)
 
         if [ "$IDENTIFIER" = "unicode" ]; then
             if [ "$STATUS" = "Playing" ]; then
@@ -115,13 +123,13 @@ dwm_spotify () {
             fi
         fi
         
-        if [ $TRACK_LEN > 9 ]; then
-			TRACK=$(echo "${TRACK:0:9}..")
-		fi
+        #if [ $TRACK_LEN > 9 ]; then
+		#	TRACK=$(echo "${TRACK:0:9}...")
+		#fi
         
-        printf "^c#BDE51A^ %s%s %s - %s " "$SEP1" "$STATUS" "$ARTIST" "$TRACK"
+        printf "^c#BDE51A^ %s %s-%s" "$STATUS" "${ARTIST:0:10}..":"${TRACK:0:9}..."
+        printf "%0d:%02d/" $((POSITION%3600/60)) $((POSITION%60))
         printf "%0d:%02d" $((DURATION%3600/60)) $((DURATION%60))
-        printf "%s\n" "$SEP2"
     fi
 }
 
@@ -195,8 +203,6 @@ get_cputemp(){
 
 ## Main
 while true; do
-  [ "$interval" == 0 ] || [ $(("$interval" % 3600)) == 0 ] && updates=$(updates)
-  interval=$((interval + 1))
-
+  interval++
   sleep 1 && xsetroot -name "$(dwm_spotify) $(get_disk) $(updates) $(battery0) $(battery1) $(brightness) $(cpu_info) $(get_cputemp) $(memory) $(wlan) $(get_bluetooth) $(clock) $(get_date)"
 done

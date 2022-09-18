@@ -5,6 +5,8 @@ interval=0
 SEP1="|"
 SEP2="|"
 IDENTIFIER="unicode"
+CPU_TYPE=$(grep -i 'model name' /proc/cpuinfo | head -n 1 | awk '{ print $4 }')
+IS_LAP=$(upower -i $(upower -e | grep 'BAT'))
 
 ## Cpu Info
 cpu_info() {
@@ -45,9 +47,6 @@ FIRE=' '
 WARNING_LEVEL=80
 
 get_cputemp(){
-        # CPU_T=$(cat /sys/devices/platform/coretemp.0/hwmon/hwmon?/temp2_input)
-        # CPU_TEMP=$(expr $CPU_T / 1000)
-        CPU_TYPE=$(grep -i 'model name' /proc/cpuinfo | head -n 1 | awk '{ print $4 }')
 
         if [ "$CPU_TYPE" = "AMD" ]; then
                 CPU_TEMP="$(sensors | grep Tctl | awk 'NR==1{gsub("+", " "); gsub("\\..", " "); print $2}')"
@@ -149,6 +148,18 @@ updates() {
 	fi
 }
 
+updates() {
+    if [ "$interval" == 0 ] || [ $(("$interval" % 3600)) == 0 ]; then
+		updates=$(checkupdates | wc -l)
+	fi
+
+	if [ -z "$updates" ]; then
+		printf "^c#98C379^$SEP1  Ok"
+	else
+		printf "^c#98C379^$SEP1  $updates"
+	fi
+}
+
 ## Battery Info
 battery() {
 	BAT=$(upower -i `upower -e | grep 'BAT'` | grep 'percentage' | cut -d':' -f2 | tr -d '%,[:blank:]')
@@ -190,12 +201,21 @@ brightness() {
 
 dwm_spotify () {
     if ps -C spotify > /dev/null; then
-        ARTIST=$(playerctl -p spotify metadata artist)
-        TRACK=$(playerctl -p spotify metadata title)
-        #TRACK_LEN=$(expr length $TRACK)
-        DURATION=$(playerctl -p spotify metadata mpris:length | sed 's/.\{6\}$//')
-        STATUS=$(playerctl -p spotify status)
+        PLAYER="spotify"
+    elif ps -C spotifyd > /dev/null; then
+        PLAYER="spotifyd"
+    elif ps -C ncspot > /dev/null; then
+		PLAYER="ncspot"
+    fi
 
+    if [ "$PLAYER" = "spotify" ] || [ "$PLAYER" = "spotifyd" ] || [ "$PLAYER" = "ncspot" ]; then
+        ARTIST=$(playerctl -p $PLAYER metadata artist)
+        TRACK=$(playerctl -p $PLAYER metadata title)
+        POSITION=$(playerctl position | sed 's/..\{6\}$//')
+        DURATION=$(playerctl -p $PLAYER metadata mpris:length | sed 's/.\{6\}$//')
+        STATUS=$(playerctl status)
+        SHUFFLE=$(playerctl shuffle)
+        
         if [ "$IDENTIFIER" = "unicode" ]; then
             if [ "$STATUS" = "Playing" ]; then
                 STATUS="▶"
@@ -209,13 +229,50 @@ dwm_spotify () {
                 STATUS="PAU"
             fi
         fi
+
+        printf "%s %s-%s" "$STATUS" "${ARTIST:0:10}...""${TRACK:0:9}..."
+        printf "%0d:%02d/" $((POSITION%3600/60)) $((POSITION%60))
+        printf "%0d:%02d" $((DURATION%3600/60)) $((DURATION%60))
+        printf "%s" "$SHUFFLE"
+    fi
+}
+
+dwm_mpc () {
+    if ps -C mpd > /dev/null; then
+        ARTIST=$(mpc current -f %artist%)
+        TRACK=$(mpc current -f %title%)
+        POSITION=$(mpc status | grep "%)" | awk '{ print $3 }' | awk -F/ '{ print $1 }')
+        DURATION=$(mpc current -f %time%)
+        STATUS=$(mpc status | sed -n 2p | awk '{print $1;}')
+        SHUFFLE=$(mpc status | tail -n 1 | awk '{print $6}')
+
+        if [ "$IDENTIFIER" = "unicode" ]; then
+            if [ "$STATUS" = "[playing]" ]; then
+                STATUS="▶"
+            else
+                STATUS="⏸"
+            fi
+
+            if [ "$SHUFFLE" = "on" ]; then
+                SHUFFLE=" 🔀"
+            else
+                SHUFFLE=""
+            fi
+        else
+            if [ "$STATUS" = "[playing]" ]; then
+                STATUS="PLA"
+            else
+                STATUS="PAU"
+            fi
+
+            if [ "$SHUFFLE" = "on" ]; then
+                SHUFFLE=" S"
+            else
+                SHUFFLE=""
+            fi
+        fi
         
-        #if [ $TRACK_LEN > 9 ]; then
-		#	TRACK=$(echo "${TRACK:0:9}...")
-		#fi
-        
-        printf "^c#BDE51A^ %s %s-%s" "$STATUS" "$ARTIST":"$(echo "${TRACK:0:9}...")"
-        #printf "%0d:%02d" $((DURATION%3600/60)) $((DURATION%60))
+        printf "%s%s %s - %s %s/%s%s%s" "$STATUS" "${ARTIST:0:10}..." "${TRACK:0:9}..." "$POSITION" "$DURATION" "$SHUFFLE"
     fi
 }
 

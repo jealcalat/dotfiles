@@ -38,6 +38,6 @@ for f in /tmp/countdown.*; do
 
         # Notify the user and play a sound when the timer reaches 0
         notify-send "Timer Finished!"
-        mpv ~/home/mrrobot/Documents/GitHub/dotfiles/dwm/dwm-bar_joestandring/countdown/alarm.ogg
+        mpv /home/mrrobot/Documents/GitHub/dotfiles/dwm/dwm-bar_joestandring/countdown/alarm.ogg
     fi
 done

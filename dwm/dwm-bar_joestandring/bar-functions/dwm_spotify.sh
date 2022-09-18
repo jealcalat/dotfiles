@@ -13,9 +13,11 @@ dwm_spotify () {
         PLAYER="spotify"
     elif ps -C spotifyd > /dev/null; then
         PLAYER="spotifyd"
+    elif ps -C ncspot > /dev/null; then
+		PLAYER="ncspot"
     fi
 
-    if [ "$PLAYER" = "spotify" ] || [ "$PLAYER" = "spotifyd" ]; then
+    if [ "$PLAYER" = "spotify" ] || [ "$PLAYER" = "spotifyd" ] || [ "$PLAYER" = "ncspot" ]; then
         ARTIST=$(playerctl metadata artist)
         TRACK=$(playerctl metadata title)
         POSITION=$(playerctl position | sed 's/..\{6\}$//')
