@@ -138,6 +138,10 @@ get_cputemp(){
         else
                 CPU_TEMP="$(sensors | grep temp1 | awk 'NR==1{gsub("+", " "); gsub("\\..", " "); print $2}')"
         fi
+        
+        if [ -z $CPU_TEMP ]; then
+			CPU_TEMP="$(sensors | grep Tctl | awk 'NR==1{gsub("+", " "); gsub("\\..", " "); print $2}')"; 
+        fi
 
         if [ "$CPU_TEMP" -ge $WARNING_LEVEL ]; then
                 PREFIX="^c#668EE3^$FIRE$PREFIX"
@@ -344,7 +348,7 @@ dwm_countdown () {
 }
 
 while true; do
-  interval++
+  ((interval++))
   xsetroot -name "^c#F5E4CE^$(dwm_spotify) $(process) $(get_cputemp)^c#F5E4CE^ $(memory) $(get_disk) $(batteries_t480) $(check_updates) ^c#F5E4CE^$NET_NAME $(get_bluetooth) $(brightness) $(dwm_alsa) $(datetime) $(dwm_countdown)"
   sleep 1
 done
