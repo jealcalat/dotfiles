@@ -138,6 +138,10 @@ get_cputemp(){
         else
                 CPU_TEMP="$(sensors | grep temp1 | awk 'NR==1{gsub("+", " "); gsub("\\..", " "); print $2}')"
         fi
+        
+        if [ -z $CPU_TEMP ]; then
+			CPU_TEMP="$(sensors | grep Tctl | awk 'NR==1{gsub("+", " "); gsub("\\..", " "); print $2}')"; 
+        fi
 
         if [ "$CPU_TEMP" -ge $WARNING_LEVEL ]; then
                 PREFIX="^c#668EE3^$FIRE$PREFIX"
