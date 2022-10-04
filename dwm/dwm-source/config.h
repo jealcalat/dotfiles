@@ -24,9 +24,9 @@ enum showtab_modes { showtab_never, showtab_auto, showtab_nmodes, showtab_always
 static const int showtab            		= showtab_auto;
 static const int toptab             		= True;
 static const int topbar             		= 1;	/* 0 means bottom bar */
-static const int horizpadbar        		= 15;
-static const int vertpadbar         		= 15;
-static const int vertpadtab         		= 34;
+static const int horizpadbar        		= 10;
+static const int vertpadbar         		= 10;
+static const int vertpadtab         		= 30;
 static const int horizpadtabi       		= 10;
 static const int horizpadtabo       		= 10;
 static const int scalepreview       		= 4;
@@ -61,10 +61,11 @@ static const char *colors[][3]  = {
 };
 
 /* ******************** Tags/Workspaces ******************** */
-static char *tags[] = {"", "",  "", "", ""};
+static char *tags[] = {"", "", "", "", "", "", "", ""};
 
 static const int tagschemes[] = { SchemeTag1, SchemeTag2, SchemeTag3,
-                                  SchemeTag4, SchemeTag5
+                                  SchemeTag4, SchemeTag5, SchemeTag6,
+                                  SchemeTag7, SchemeTag8
                                 };
 
 static const unsigned int ulinepad		= 5;	/* horizontal padding between the underline and tag */
@@ -169,10 +170,7 @@ static const char *mutevol[] 			= { "volume", "--toggle",  NULL };
 static const char *upvol[]   			= { "volume", "--inc",  	NULL };
 static const char *downvol[] 			= { "volume", "--dec",    	NULL };
 static const char *upbl[] 				= { "brightness", "--inc",    NULL };
-//static const char *toggleplay[]			= { "playerctl", "--all-players play-pause", NULL };
-//static const char *stop[] 				= { "playerctl", "--all-players stop", NULL };
-//static const char *playnext[] 			= { "playerctl", "next", NULL };
-//static const char *playprev[] 			= { "playerctl", "previous", NULL };
+static const char *downbl[] 			= { "brightness", "--dec",  NULL };
 
 /* Screenshot */
 static const char *shotnow[]  			= { "takeshot", "--now", NULL };
@@ -190,12 +188,8 @@ static Key keys[] = {
 	{ 0, 						XF86XK_AudioLowerVolume, 	spawn, {.v = downvol } },
 	{ 0, 						XF86XK_AudioRaiseVolume, 	spawn, {.v = upvol   } },
 	{ 0, 						XF86XK_MonBrightnessUp, 	spawn, {.v = upbl   } },
-	//{ 0, 						XF86XK_MonBrightnessDown, 	spawn, {.v = downbl   } },
-	//{ 0, 						XF86XK_AudioPlay,			 	spawn, {.v = toggleplay   } },
-	//{ 0, 						XF86XK_AudioStop,			 	spawn, {.v = stop   } },
-	//{ 0, 						XF86XK_AudioNext,			 	spawn, {.v = playnext   } },
-	//{ 0, 						XF86XK_AudioPrev,			 	spawn, {.v = playprev   } },
-	
+	{ 0, 						XF86XK_MonBrightnessDown, 	spawn, {.v = downbl   } },
+
 	// Print Keys -----------
 	{ 0, 						XK_Print, 					spawn, {.v = shotnow } },
 	{ ALTKEY, 					XK_Print, 					spawn, {.v = shotin5 } },
@@ -328,8 +322,6 @@ static Button buttons[] = {
 	{ ClkClientWin,         MODKEY,         Button1,        moveorplace,    {.i = 0} },
     { ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
     { ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
-    { ClkClientWin,         ControlMask,    Button1,        dragmfact,      {0} },
-    { ClkClientWin,         ControlMask,    Button3,        dragcfact,      {0} },
     { ClkTagBar,            0,              Button1,        view,           {0} },
     { ClkTagBar,            0,              Button3,        toggleview,     {0} },
     { ClkTagBar,            MODKEY,         Button1,        tag,            {0} },

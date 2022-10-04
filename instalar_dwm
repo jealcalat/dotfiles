@@ -1,0 +1,29 @@
+install 
+
+dwm y st
+
+reemplazar dwm config files por las propias (o de archcraft-dwm)
+crear directorio .config/dwm
+
+copiar dotfiles
+
+instalar dependencias (algunas con yay)
+
+sudo pacman -S base-devel libx11 libxft libxinerama freetype2 fontconfig rofi polybar geany dunst dmenu
+yay -S maim xclip ksuperkey betterlockscreen hsetroot
+
+depends=('libx11' 'libxinerama' 'libxft' 'freetype2' 
+		'archcraft-st' 'hsetroot'
+		'alacritty' 'thunar' 'geany'
+		'rofi' 'polybar' 'dunst'
+		'mpd' 'mpc'
+		'maim' 'xclip' 'viewnior' 'feh'
+		'ksuperkey' 
+		'betterlockscreen'
+		'xfce4-power-manager' 
+		'xorg-xsetroot'
+)
+
+con excepción de archcraft-st
+
+crear DWM.desktop

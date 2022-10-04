@@ -285,7 +285,7 @@ batteries_t480() {
 	if [ -d "upower -i $(upower -e | grep 'BAT')" ]; then
 		printf "$powerline_s BT0%s,BT1%s" "$(battery0)" "$(battery1)"
 	else
-		printf "$powerline_s  "
+		printf "" # "$powerline_s  "
 	fi
 }
 
@@ -344,8 +344,8 @@ dwm_countdown () {
 }
 
 while true; do
-  interval++
-  xsetroot -name "^c#F5E4CE^$(dwm_spotify) $(process) $(get_cputemp)^c#F5E4CE^ $(memory) $(get_disk) $(batteries_t480) $(check_updates) ^c#F5E4CE^$NET_NAME $(get_bluetooth) $(brightness) $(dwm_alsa) $(datetime) $(dwm_countdown)"
+  ((interval++))
+  xsetroot -name "^c#F5E4CE^$(dwm_spotify) $(process) $(get_cputemp)^c#F5E4CE^ $(memory) $(get_disk) $(batteries_t480) $(check_updates)^c#F5E4CE^ $(dwm_alsa) $(datetime) $(dwm_countdown)"
   sleep 1
 done
 
