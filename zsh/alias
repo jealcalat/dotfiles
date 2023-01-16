@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# +--------+
+# | System |
+# +--------+
+
+alias suspend='sudo pm-suspend'
+alias zshconfig="geany ~/.zshrc"
+# update/upgrade and shutdown 10 min
+alias upgShut10="sudo pacman -Syu && shutdown -P 1"
+# upgrade and restart
+alias upgRes="sudo pacman -Syu && shutdown -r now"
+# restart
+alias reStart="shutdown -r now"
+# shutdown in P minutes
+shutPmin(){
+	shutdown -P $1
+}
+
+# +--------+
+# | Pacman |
+# +--------+
+
+alias pacu='sudo pacman -Syu'             # update
+alias pacin='sudo pacman -S'
