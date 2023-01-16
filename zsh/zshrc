@@ -89,7 +89,7 @@ source $ZSH_CUSTOM/plugins/zsh-history-substring-search/zsh-history-substring-se
 # +-------+
 source $HOME/Documents/GitHub/dotfiles/zsh/alias
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-
+alias calIteso="evince $HOME/Desktop/CalIteso2023.pdf"
 # +-----------------+
 # | Starship prompt | 
 # +-----------------+
