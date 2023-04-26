@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# usage: grabDesk.sh [-o output_file] [--video_size video_size] [--crf video_quality]
+
+# example: grabDesk.sh -o output.mkv --video_size 1920x1080 --crf 18
+
 # Default values
 output_file="output.mkv"
 video_size="1920x1080"
@@ -53,3 +57,5 @@ ffmpeg -y \
     -c:v ${video_codec} -pix_fmt ${video_pixel_format} -crf ${video_quality} \
     -c:a ${audio_codec} -b:a ${audio_bitrate} \
     ${output_file}
+
+
