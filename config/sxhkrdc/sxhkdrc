@@ -1,0 +1,17 @@
+XF86MonBrightnessDown
+	/home/mrrobot/.local/bin/brightness --dec
+	
+XF86MonBrightnessUp
+	/home/mrrobot/.local/bin/brightness --inc
+
+XF86AudioRaiseVolume
+	/home/mrrobot/.local/bin/volume --inc
+	
+XF86AudioLowerVolume
+	/home/mrrobot/.local/bin/volume --dec
+
+ctrl + alt + {h,k,p}
+	playerctl {previous,next,play-pause}
+
+XF86Audio{Prev,Next,Play,Stop}
+	playerctl {previous,next,play-pause,pause}

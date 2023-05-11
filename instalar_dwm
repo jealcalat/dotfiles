@@ -9,7 +9,7 @@ copiar dotfiles
 
 instalar dependencias (algunas con yay)
 
-sudo pacman -S base-devel libx11 libxft libxinerama freetype2 fontconfig rofi polybar geany dunst dmenu
+sudo pacman -S base-devel libx11 libxft libxinerama freetype2 fontconfig rofi polybar geany dunst dmenu ibus
 yay -S maim xclip ksuperkey betterlockscreen hsetroot
 
 depends=('libx11' 'libxinerama' 'libxft' 'freetype2' 

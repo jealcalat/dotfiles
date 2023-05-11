@@ -1,0 +1,23 @@
+XF86MonBrightnessDown
+	/home/mrrobot/.local/bin/brightness --dec
+	
+XF86MonBrightnessUp
+	/home/mrrobot/.local/bin/brightness --inc
+
+XF86AudioRaiseVolume
+	/home/mrrobot/.local/bin/volume --inc
+	
+XF86AudioLowerVolume
+	/home/mrrobot/.local/bin/volume --dec
+
+ctrl + alt + {h,k,p}
+	playerctl {previous,next,play-pause}
+
+XF86Audio{Prev,Next,Play,Stop}
+	playerctl {previous,next,play-pause,pause}
+
+ctrl + alt + d
+	alacritty -e bash -c "/home/mrrobot/Documents/GitHub/dotfiles/scripts/arandr_select.sh; read -n1 -sp 'Press any key to close the terminal...' && exit"
+
+shift F5
+	alacritty -e bash -c "/home/mrrobot/Documents/GitHub/dotfiles/scripts/arandr_select.sh; read -n1 -sp 'Press any key to close the terminal...' && exit"
