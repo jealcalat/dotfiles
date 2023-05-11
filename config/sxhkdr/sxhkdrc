@@ -17,7 +17,14 @@ XF86Audio{Prev,Next,Play,Stop}
 	playerctl {previous,next,play-pause,pause}
 
 ctrl + alt + d
-	alacritty -e bash -c "/home/mrrobot/Documents/GitHub/dotfiles/scripts/arandr_select.sh; read -n1 -sp 'Press any key to close the terminal...' && exit"
+	alacritty -e bash -c "/home/mrrobot/.local/bin/arandr_select.sh; read -n1 -sp 'Press any key to close the terminal...' && exit"
 
-shift F5
-	alacritty -e bash -c "/home/mrrobot/Documents/GitHub/dotfiles/scripts/arandr_select.sh; read -n1 -sp 'Press any key to close the terminal...' && exit"
+shift + F5
+	alacritty --class 'alacritty-float,alacritty-float' -e bash -c "/home/mrrobot/.local/bin/arandr_select.sh; read -n1 -sp 'Press any key to close the terminal...' && exit"
+
+
+ctrl + alt + r
+	/home/mrrobot/.local/bin/ranger_float.sh
+
+ctrl + alt + f
+	/home/mrrobot/.local/bin/dwmterm.sh --float $pwd
