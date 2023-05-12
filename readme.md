@@ -50,7 +50,7 @@ sudo pacman -Syu \
 base-devel libx11 libxft libxinerama freetype2 \
 fontconfig rofi polybar geany dunst dmenu \ 
 xorg-xbacklight meld baobab catfish v4l-utils \
-alacritty firefox ranger ibus xorg-xsetroot
+alacritty firefox ranger ibus xorg-xsetroot sxhkd
 ```
 
 ```console

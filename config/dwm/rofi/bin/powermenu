@@ -71,7 +71,7 @@ case $chosen in
     $logout)
 		ans=$(get_confirmation &)
 		if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
-			dwmc quit
+			pkill -KILL -u $USER
 		elif [[ $ans == "no" ]] || [[ $ans == "NO" ]] || [[ $ans == "n" ]]; then
 			exit
         else
