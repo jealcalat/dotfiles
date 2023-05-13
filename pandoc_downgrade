@@ -1,4 +1,4 @@
-udo pacman -U file://var/cache/pacman/pkg/pandoc-2.18-59-x86_64.pkg.tar.zst
+sudo pacman -U file://var/cache/pacman/pkg/pandoc-2.18-59-x86_64.pkg.tar.zst
 sudo pacman -U file://var/cache/pacman/pkg/haskell-skylighting-0.12.3.1-23-x86_64.pkg.tar.zst
 sudo pacman -U file://var/cache/pacman/pkg/haskell-skylighting-core-0.12.3.1-23-x86_64.pkg.tar.zst
 sudo pacman -U file://var/cache/pacman/pkg/haskell-citeproc-0.7-24-x86_64.pkg.tar.zst

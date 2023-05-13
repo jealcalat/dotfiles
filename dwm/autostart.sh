@@ -7,13 +7,17 @@
 # Kill already running process
 _ps=(picom dunst ksuperkey mpd xfce-polkit xfce4-power-manager)
 for _prs in "${_ps[@]}"; do
-	if [[ `pidof ${_prs}` ]]; then
+	if [[ $(pidof ${_prs}) ]]; then
 		killall -9 ${_prs}
 	fi
 done
 
 # Fix cursor
 xsetroot -cursor_name left_ptr
+
+# español
+
+setxkbmap -layout es
 
 # Polkit agent
 /usr/lib/xfce-polkit/xfce-polkit &
@@ -26,32 +30,35 @@ ksuperkey -e 'Super_L=Alt_L|F1' &
 ksuperkey -e 'Super_R=Alt_L|F1' &
 
 # Restore wallpaper
-hsetroot -cover /usr/share/archcraft/dwm/wallpapers/dwm_7.png
+hsetroot -cover /home/mrrobot/.config/dwm/wallpapers/keyboards.jpg
 
-# Lauch dwmbarR
-# /usr/share/archcraft/dwm/bin/dwmbar.sh &
-# use custom bar
-/home/mrrobot/Documents/GitHub/dotfiles/dwm/dwmbar_desktop.sh &
-
+# Lauch dwmbar
+# /home/mrrobot/.config/dwm/dwmbar.sh &
+# /home/mrrobot/Documents/GitHub/dotfiles/dwm/PowerBar-dwm-main/PowerBar.sh &
+/home/mrrobot/.config/dwm/dwm-bar_joestandring/dwm_bar.sh &
 # Lauch notification daemon
-/usr/share/archcraft/dwm/bin/dwmdunst.sh
+/home/mrrobot/.config/dwm/dwmdunst.sh
 
 # Lauch compositor
-/usr/share/archcraft/dwm/bin/dwmcomp.sh
+/home/mrrobot/.config/dwm/dwmcomp.sh
 
 # Start mpd
-exec mpd &
+# exec mpd &
 
 # Fix Java problems
 wmname "LG3D"
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 ## Add your autostart programs here --------------
-
-/usr/bin/sxhkd -c /home/mrrobot/.config/dwm/sxhkdrc &
+sxhkd &
+udiskie &
+(sleep 20s && dropbox) &
+(sleep 20s && megasync) &
 
 ## -----------------------------------------------
 
 # Launch DWM
-#dwm
-while dwm; [ $? -ne 0  ]; do echo "start dwm"; done
+while
+	dwm
+	[ $? -ne 0 ]
+do echo "start dwm"; done

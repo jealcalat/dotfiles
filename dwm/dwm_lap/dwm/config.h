@@ -86,27 +86,27 @@ static char dmenumon[2] 				= "0"; /* component of dmenucmd, manipulated in spaw
 static const char *dmenucmd[]  			= { "dmenu", NULL };
 
 /* Launch Apps */
-static const char *stcmd[]  			= { "/home/mrrobot/.config/dwm/dwmterm.sh", NULL };
-static const char *termcmd[]  			= { "/home/mrrobot/.config/dwm/dwmterm.sh", NULL };
-static const char *floatterm[]  		= { "/home/mrrobot/.config/dwm/dwmterm.sh", "--float", NULL };
-static const char *fmcmd[]    			= { "/home/mrrobot/.config/dwm/dwmapps.sh", "--file", NULL };
-static const char *editcmd[]  			= { "/home/mrrobot/.config/dwm/dwmapps.sh", "--editor", NULL };
-static const char *webcmd[]  			= { "/home/mrrobot/.config/dwm/dwmapps.sh", "--web", NULL };
+static const char *stcmd[]  			= { "/home/$USER/.config/dwm/dwmterm.sh", NULL };
+static const char *termcmd[]  			= { "/home/$USER/.config/dwm/dwmterm.sh", NULL };
+static const char *floatterm[]  		= { "/home/$USER/.config/dwm/dwmterm.sh", "--float", NULL };
+static const char *fmcmd[]    			= { "/home/$USER/.config/dwm/dwmapps.sh", "--file", NULL };
+static const char *editcmd[]  			= { "/home/$USER/.config/dwm/dwmapps.sh", "--editor", NULL };
+static const char *webcmd[]  			= { "/home/$USER/.config/dwm/dwmapps.sh", "--web", NULL };
 
 /* Rofi Menus */
-static const char *rofi_cmd[] 			= { "/home/mrrobot/.config/dwm/rofi/bin/launcher", NULL };
-static const char *rofi_rootcmd[] 		= { "/home/mrrobot/.config/dwm/rofi/bin/asroot", NULL };
-static const char *rofi_layoutcmd[] 	= { "/home/mrrobot/.config/dwm/rofi/bin/layouts", NULL };
-static const char *rofi_mpdcmd[] 		= { "/home/mrrobot/.config/dwm/rofi/bin/mpd", NULL };
-static const char *rofi_nmcmd[]    		= { "/home/mrrobot/.config/dwm/rofi/bin/network_menu", NULL };
-static const char *rofi_powercmd[]  	= { "/home/mrrobot/.config/dwm/rofi/bin/powermenu", NULL };
-static const char *rofi_shotcmd[]  		= { "/home/mrrobot/.config/dwm/rofi/bin/screenshot", NULL };
-static const char *rofi_wincmd[]  		= { "/home/mrrobot/.config/dwm/rofi/bin/windows", NULL };
+static const char *rofi_cmd[] 			= { "/home/$USER/.config/dwm/rofi/bin/launcher", NULL };
+static const char *rofi_rootcmd[] 		= { "/home/$USER/.config/dwm/rofi/bin/asroot", NULL };
+static const char *rofi_layoutcmd[] 	= { "/home/$USER/.config/dwm/rofi/bin/layouts", NULL };
+static const char *rofi_mpdcmd[] 		= { "/home/$USER/.config/dwm/rofi/bin/mpd", NULL };
+static const char *rofi_nmcmd[]    		= { "/home/$USER/.config/dwm/rofi/bin/network_menu", NULL };
+static const char *rofi_powercmd[]  	= { "/home/$USER/.config/dwm/rofi/bin/powermenu", NULL };
+static const char *rofi_shotcmd[]  		= { "/home/$USER/.config/dwm/rofi/bin/screenshot", NULL };
+static const char *rofi_wincmd[]  		= { "/home/$USER/.config/dwm/rofi/bin/windows", NULL };
 
 /* Misc */
 static const char *cpickcmd[]  			= { "color-gpick", NULL };
 static const char *lockcmd[]  			= { "betterlockscreen", "--lock", NULL };
-static const char *layoutswitcher[]  	= { "/home/mrrobot/.config/dwm/bin/layoutmenu.sh", NULL };
+static const char *layoutswitcher[]  	= { "/home/$USER/.config/dwm/bin/layoutmenu.sh", NULL };
 
 /* Hardware keys for volume and brightness */
 #include <X11/XF86keysym.h>

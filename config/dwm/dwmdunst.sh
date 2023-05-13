@@ -4,8 +4,8 @@
 ## Everyone is permitted to copy and distribute copies of this file under GNU-GPL3
 
 ## Launch dunst daemon
-if [[ `pidof dunst` ]]; then
+if [[ $(pidof dunst) ]]; then
 	pkill dunst
 fi
 
-dunst -config /home/mrrobot/.config/dwm/dunstrc &
+dunst -config /home/$USER/.config/dwm/dunstrc &

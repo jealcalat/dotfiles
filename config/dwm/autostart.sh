@@ -7,7 +7,7 @@
 # Kill already running process
 _ps=(picom dunst ksuperkey mpd xfce-polkit xfce4-power-manager)
 for _prs in "${_ps[@]}"; do
-	if [[ `pidof ${_prs}` ]]; then
+	if [[ $(pidof ${_prs}) ]]; then
 		killall -9 ${_prs}
 	fi
 done
@@ -26,17 +26,17 @@ ksuperkey -e 'Super_L=Alt_L|F1' &
 ksuperkey -e 'Super_R=Alt_L|F1' &
 
 # Restore wallpaper
-hsetroot -cover /home/mrrobot/.config/dwm/wallpapers/lain4.jpg
+hsetroot -cover /home/$USER/.config/dwm/wallpapers/lain4.jpg
 
 # Lauch dwmbar
-# /home/mrrobot/.config/dwm/dwmbar.sh &
-# /home/mrrobot/Documents/GitHub/dotfiles/dwm/PowerBar-dwm-main/PowerBar.sh &
-/home/mrrobot/.config/dwm/dwm-bar_joestandring/dwm_bar.sh &
+# /home/$USER/.config/dwm/dwmbar.sh &
+# /home/$USER/Documents/GitHub/dotfiles/dwm/PowerBar-dwm-main/PowerBar.sh &
+/home/$USER/.config/dwm/dwm-bar_joestandring/dwm_bar.sh &
 # Lauch notification daemon
-/home/mrrobot/.config/dwm/dwmdunst.sh
+/home/$USER/.config/dwm/dwmdunst.sh
 
 # Lauch compositor
-/home/mrrobot/.config/dwm/dwmcomp.sh
+/home/$USER/.config/dwm/dwmcomp.sh
 
 # Start mpd
 # exec mpd &
@@ -52,4 +52,7 @@ sxhkd &
 ## -----------------------------------------------
 
 # Launch DWM
-while dwm; [ $? -ne 0  ]; do echo "start dwm"; done
+while
+	dwm
+	[ $? -ne 0 ]
+do echo "start dwm"; done

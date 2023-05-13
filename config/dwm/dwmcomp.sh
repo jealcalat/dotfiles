@@ -10,4 +10,4 @@ killall -q picom
 while pgrep -u $UID -x picom >/dev/null; do sleep 1; done
 
 # Launch picom
-picom --config /home/mrrobot/.config/dwm/picom.conf &
+picom --config /home/$USER/.config/dwm/picom.conf &

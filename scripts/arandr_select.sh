@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Replace the below path with the path to your scripts directory
-SCRIPTS_DIRECTORY="/home/mrrobot/.screenlayout"
+SCRIPTS_DIRECTORY="/home/$USER/.screenlayout"
 
 function show_menu() {
     echo "Please select a script to run:"

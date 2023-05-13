@@ -25,19 +25,18 @@ for f in /tmp/countdown.*; do
         fi
 
         # Convert input to seconds
-        TIMER=$(( (HOU*3600) + (MIN*60) + SEC ))
+        TIMER=$(((HOU * 3600) + (MIN * 60) + SEC))
 
         # Count down and output remaining time to temp file
-        while [ $TIMER -gt 0 ]
-        do
-            printf "%02dh:%02dm:%02ds\n" $((TIMER/3600)) $((TIMER%3600/60)) $((TIMER%60))
-            printf "%02d:%02d:%02d\n" $((TIMER/3600)) $((TIMER%3600/60)) $((TIMER%60)) >> "$TMP"
+        while [ $TIMER -gt 0 ]; do
+            printf "%02dh:%02dm:%02ds\n" $((TIMER / 3600)) $((TIMER % 3600 / 60)) $((TIMER % 60))
+            printf "%02d:%02d:%02d\n" $((TIMER / 3600)) $((TIMER % 3600 / 60)) $((TIMER % 60)) >>"$TMP"
             sleep 1
-            TIMER=$(( TIMER - 1 ))
+            TIMER=$((TIMER - 1))
         done
 
         # Notify the user and play a sound when the timer reaches 0
         notify-send "Timer Finished!"
-        mpv /home/mrrobot/Documents/GitHub/dotfiles/dwm/dwm-bar_joestandring/countdown/alarm.ogg
+        mpv /home/$USER/Documents/GitHub/dotfiles/dwm/dwm-bar_joestandring/countdown/alarm.ogg
     fi
 done

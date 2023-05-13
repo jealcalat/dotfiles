@@ -3,7 +3,7 @@
 ## Copyright (C) 2020-2022 Aditya Shakya <adi1090x@gmail.com>
 ## Everyone is permitted to copy and distribute copies of this file under GNU-GPL3
 
-DIR="/home/mrrobot/.config/dwm"
+DIR="/home/$USER/.config/dwm"
 
 rofi_command="rofi -theme $DIR/rofi/themes/mpd.rasi"
 
@@ -26,9 +26,9 @@ status="$(mpc status)"
 
 # Defines the Play / Pause option content
 if [[ $status == *"[playing]"* ]]; then
-	toggle="$button_pause"
+    toggle="$button_pause"
 else
-	toggle="$button_play"
+    toggle="$button_play"
 fi
 
 # Display if repeat mode is on / off
@@ -64,22 +64,22 @@ fi
 # Spawn the mpd menu with the "Play / Pause" entry selected by default
 chosen="$(echo -e "$options" | $rofi_command -p "$current" -dmenu $active $urgent -selected-row 0)"
 case $chosen in
-    $button_previous)
-        mpc -q prev && kunst --size 60x60 --silent
-        ;;
-    $toggle)
-        mpc -q toggle && kunst --size 60x60 --silent
-        ;;
-    $button_stop)
-        mpc -q stop
-        ;;
-    $button_next)
-        mpc -q next && kunst --size 60x60 --silent
-        ;;
-    $tog_repeat)
-        mpc -q repeat
-        ;;
-    $tog_random)
-        mpc -q random
-        ;;
+$button_previous)
+    mpc -q prev && kunst --size 60x60 --silent
+    ;;
+$toggle)
+    mpc -q toggle && kunst --size 60x60 --silent
+    ;;
+$button_stop)
+    mpc -q stop
+    ;;
+$button_next)
+    mpc -q next && kunst --size 60x60 --silent
+    ;;
+$tog_repeat)
+    mpc -q repeat
+    ;;
+$tog_random)
+    mpc -q random
+    ;;
 esac

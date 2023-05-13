@@ -8,4 +8,4 @@ rofi -dmenu \
      -i \
      -no-fixed-num-lines \
      -p "User Password: " \
-     -theme /home/mrrobot/.config/dwm/rofi/themes/askpass.rasi &
+     -theme /home/$USER/.config/dwm/rofi/themes/askpass.rasi &

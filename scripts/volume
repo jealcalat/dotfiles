@@ -6,11 +6,11 @@
 ## Script To Manage Speaker Volume For Archcraft.
 
 # icons
-iDIR='/home/mrrobot/.config/dwm/icons/'
+iDIR='/home/$USER/.config/dwm/icons/'
 
 # Get Volume
 get_volume() {
-	volume=`amixer get Master | tail -n1 | awk -F ' ' '{print $5}' | tr -d '[]'`
+	volume=$(amixer get Master | tail -n1 | awk -F ' ' '{print $5}' | tr -d '[]')
 	echo "$volume"
 }
 
@@ -29,7 +29,7 @@ get_icon() {
 	fi
 }
 
-# Notify 
+# Notify
 notify_vol() {
 	get_icon && dunstify -u low --replace=69 -i "$icon" "Volume : $(get_volume)"
 }
