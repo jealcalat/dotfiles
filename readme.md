@@ -47,10 +47,7 @@ cp -r dwm/ .config/dwm
 ```console
 sudo pacman -Syu \
 --needed --noconfirm \
-base-devel libx11 libxft libxinerama freetype2 \
-fontconfig rofi polybar geany dunst dmenu \ 
-xorg-xbacklight meld baobab catfish v4l-utils \
-alacritty firefox ranger ibus xorg-xsetroot sxhkd
+base-devel libx11 libxft libxinerama freetype2 rofi polybar geany dunst dmenu meld baobab catfish v4l-utils alacritty firefox ranger ibus xorg-xsetroot sxhkd xorg-xbaclight fontconfig
 ```
 
 ```console
