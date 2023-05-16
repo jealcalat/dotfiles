@@ -43,20 +43,45 @@ done
 # Clone and configure dwm
 echo "Cloning dotfiles..."
 git clone $dotfiles_dir
-mkdir ~/dwm
 cd dotfiles
 
 # Make all files starting with #!/bin/bash executable
 echo "Making scripts executable..."
 find . -type f -exec grep -q -E '^#!/(bin/bash|usr/bin/env bash|bin/sh)' {} \; -exec chmod +x {} \;
 # Copy files to their respective directories
-echo "Copying files..."
+echo "Copying files to dwm and .config..."
+mkdir ~/dwm
 sudo cp -r dwm/dwm_desk/* ~/dwm/
 cp -r config/* ~/.config/
 ## Configurar geany
 cp -r dwm/geany/* ~/.config/
 cp -r scripts/* ~/.local/bin/
 
+# Create the dwm.desktop file
+echo "Creating dwm.desktop file..."
+sudo cp config/dwm/dwm.png /usr/share/icons/
+cat <<EOF >dwm.desktop
+[Desktop Entry]
+Encoding=UTF-8
+Name=DWM
+Comment=Dynamic window manager
+Exec=/home/$USER/.config/dwm/autostart.sh
+Icon=dwm
+Type=XSession
+EOF
+
+# Move the zshrc file to ~/.zshrc
+echo "zsh configuration.."
+echo "Moving zshrc to ~/.zshrc"
+mv zsh/zshrc ~/.zshrc
+
+echo "Installing oh-my-zsh..."
+RUNZSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+starship preset pastel-powerline -o ~/.config/starship.toml
+# Move the dwm.desktop file to the xsessions directory
+sudo mv dwm.desktop /usr/share/xsessions/
 # Install dwm
 echo "Installing dwm..."
 cd dwm || exit
