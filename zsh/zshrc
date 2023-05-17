@@ -87,12 +87,12 @@ source $ZSH_CUSTOM/plugins/zsh-history-substring-search/zsh-history-substring-se
 # +-------+
 # | Alias | 
 # +-------+
-source $HOME/Documents/GitHub/dotfiles/zsh/alias
-source $HOME/Documents/GitHub/dotfiles/scripts/xournal2pdf.sh
+# source $HOME/Documents/GitHub/dotfiles/zsh/alias
+# source $HOME/Documents/GitHub/dotfiles/scripts/xournal2pdf.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias calIteso="evince $HOME/Desktop/CalIteso2023.pdf"
-alias editalias="geany $HOME/Documents/GitHub/dotfiles/zsh/alias"
-alias openHere="/home/mrrobot/.config/dwm/dwmterm.sh --float"
+# alias calIteso="evince $HOME/Desktop/CalIteso2023.pdf"
+# alias editalias="geany $HOME/Documents/GitHub/dotfiles/zsh/alias"
+# alias openHere="/home/mrrobot/.config/dwm/dwmterm.sh --float"
 # +-----------------+
 # | Starship prompt | 
 # +-----------------+
