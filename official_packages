@@ -18,9 +18,11 @@
   ibus
   xorg-xsetroot
   sxhkd
-  xorg-xbaclight
+  xorg-xbacklight
+  brightnessctl
   fontconfig
   tk
+  thunar
   r
   gcc-fortran
   texlive-most 
