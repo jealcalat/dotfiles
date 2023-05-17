@@ -11,7 +11,7 @@ dir="`xdg-user-dir PICTURES`/Screenshots"
 file="Screenshot_${time}_${geometry}.png"
 
 # Commands
-notify_cmd_shot="dunstify -u low --replace=699 -i $USER/.config/dwm/icons/picture.png"
+notify_cmd_shot="dunstify -u low --replace=699 -i /home/$USER/.config/dwm/icons/picture.png"
 
 # notify and view screenshot
 notify_view () {
