@@ -54,6 +54,10 @@ sudo pacman -S --noconfirm --needed - < official_packages
 #     sudo pacman -S --noconfirm --needed "$pkg"
 # done
 
+echo "--------------------------------------------"
+echo "Changing default shell to zsh..."
+chsh -s $(which zsh)
+
 # Read the list of AUR packages from a text file
 # mapfile -t aur_packages <aur_packages
 
