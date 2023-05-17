@@ -36,6 +36,12 @@ echo "$username ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/make" | sudo tee /
 # Set correct permissions for the new sudoers configuration file
 sudo chmod 440 /etc/sudoers.d/$username
 
+# Clone and configure dwm
+echo "--------------------------------------------"
+echo "Cloning dotfiles..."
+git clone $dotfiles_dir
+cd dotfiles
+
 # Install packages from the official repositories
 
 # Read the list of packages from a text file
@@ -59,12 +65,6 @@ yay -S --noconfirm --needed - < aur_packages
 #     echo "Installing $pkg..."
 #     yay -S --noconfirm --needed "$pkg"
 # done
-
-# Clone and configure dwm
-echo "--------------------------------------------"
-echo "Cloning dotfiles..."
-git clone $dotfiles_dir
-cd dotfiles
 
 # Make all files starting with #!/bin/bash executable
 echo "--------------------------------------------"
