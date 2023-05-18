@@ -1,5 +1,5 @@
 # +--------+
-# | System | 
+# | System |
 # +--------+
 
 # If you come from bash you might have to change your $PATH.
@@ -68,7 +68,7 @@ ZSH_THEME="agnoster"
 # HIST_STAMPS="mm/dd/yyyy"
 
 # +---------+
-# | Plugins | 
+# | Plugins |
 # +---------+
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
@@ -85,27 +85,25 @@ source $ZSH_CUSTOM/plugins/zsh-history-substring-search/zsh-history-substring-se
 # export LANG=en_US.UTF-8
 
 # +-------+
-# | Alias | 
+# | Alias |
 # +-------+
-source $HOME/Documents/GitHub/dotfiles/zsh/alias
-source $HOME/Documents/GitHub/dotfiles/scripts/xournal2pdf.sh
+# source $HOME/Documents/GitHub/dotfiles/zsh/alias
+# source $HOME/Documents/GitHub/dotfiles/scripts/xournal2pdf.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias calIteso="evince $HOME/Desktop/CalIteso2023.pdf"
-alias editalias="geany $HOME/Documents/GitHub/dotfiles/zsh/alias"
-alias openHere="/home/mrrobot/.config/dwm/dwmterm.sh --float"
-# deactivate conda environements and activate radian
-alias r="conda deactivate && radian"
+# alias calIteso="evince $HOME/Desktop/CalIteso2023.pdf"
+# alias editalias="geany $HOME/Documents/GitHub/dotfiles/zsh/alias"
+# alias openHere="/home/mrrobot/.config/dwm/dwmterm.sh --float"
 # +-----------------+
-# | Starship prompt | 
+# | Starship prompt |
 # +-----------------+
 eval "$(starship init zsh)"
 
 # +----------+
-# | Anaconda | 
+# | Anaconda |
 # +----------+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/mrrobot/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+__conda_setup="$('/home/mrrobot/anaconda3/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
@@ -117,4 +115,3 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-

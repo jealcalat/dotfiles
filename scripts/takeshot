@@ -11,7 +11,7 @@ dir="`xdg-user-dir PICTURES`/Screenshots"
 file="Screenshot_${time}_${geometry}.png"
 
 # Commands
-notify_cmd_shot="dunstify -u low --replace=699 -i /usr/share/archcraft/icons/dunst/picture.png"
+notify_cmd_shot="dunstify -u low --replace=699 -i /home/$USER/.config/dwm/icons/picture.png"
 
 # notify and view screenshot
 notify_view () {
@@ -32,7 +32,7 @@ copy_shot () {
 # countdown
 countdown () {
 	for sec in `seq $1 -1 1`; do
-		dunstify -t 1000 --replace=699 -i /usr/share/archcraft/icons/dunst/timer.png "Taking shot in : $sec"
+		dunstify -t 1000 --replace=699 -i /home/$USER/.config/dwm/icons/timer.png "Taking shot in : $sec"
 		sleep 1
 	done
 }
