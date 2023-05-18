@@ -93,6 +93,8 @@ source $HOME/Documents/GitHub/dotfiles/scripts/xournal2pdf.sh
 alias calIteso="evince $HOME/Desktop/CalIteso2023.pdf"
 alias editalias="geany $HOME/Documents/GitHub/dotfiles/zsh/alias"
 alias openHere="/home/mrrobot/.config/dwm/dwmterm.sh --float"
+# deactivate conda environements and activate radian
+alias r="conda deactivate && radian"
 # +-----------------+
 # | Starship prompt | 
 # +-----------------+
