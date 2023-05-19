@@ -1,0 +1,35 @@
+XF86MonBrightnessDown
+	/home/mrrobot/.local/bin/brightness --dec
+	
+XF86MonBrightnessUp
+	/home/mrrobot/.local/bin/brightness --inc
+
+XF86AudioRaiseVolume
+	/home/mrrobot/.local/bin/volume --inc
+
+XF86AudioLowerVolume
+	/home/mrrobot/.local/bin/volume --dec
+
+# ctrl + alt + {h,k,p}
+# 	playerctl {previous,next,play-pause}
+
+# h,j,k,l keys
+alt + super + {h,j,k,l}
+  playerctl position {0.5-,10-,10+,0.5+}
+
+XF86Audio{Prev,Next,Play,Stop}
+	playerctl {previous,next,play-pause,pause}
+
+ctrl + alt + d
+	alacritty -e bash -c "/home/mrrobot/.local/bin/arandr_select.sh; read -n1 -sp 'Press any key to close the terminal...' && exit"
+
+shift + F5
+	alacritty --class 'alacritty-float,alacritty-float' -e bash -c "/home/mrrobot/.local/bin/arandr_select.sh; read -n1 -sp 'Press any key to close the terminal...' && exit"
+
+ctrl + alt + r
+	/home/mrrobot/.local/bin/ranger_float.sh
+
+ctrl + alt + l
+	alacritty --class 'alacritty-float,alacritty-float' -e bash -c "/home/mrrobot/.local/bin/keyboard_layout_menu.sh; read -n1 -sp 'Press any key to close the terminal...' && exit"
+
+
