@@ -1,32 +1,33 @@
-  base-devel
-  libx11
-  libxft
-  libxinerama
-  freetype2
-  rofi
-  polybar
-  geany
-  dunst
-  dmenu
-  meld
-  baobab
-  catfish
-  v4l-utils
-  alacritty
-  firefox
-  ranger
-  ibus
-  xorg-xsetroot
-  sxhkd
-  xorg-xbacklight
-  brightnessctl
-  fontconfig
-  tk
-  thunar
-  r
-  gcc-fortran
-  texlive-most 
-  pandoc
-  zsh
-  yay
-  starship
+base-devel
+libx11
+libxft
+libxinerama
+freetype2
+rofi
+polybar
+geany
+dunst
+dmenu
+meld
+baobab
+catfish
+v4l-utils
+alacritty
+firefox
+ranger
+ibus
+xorg-xsetroot
+sxhkd
+xorg-xbacklight
+brightnessctl
+fontconfig
+tk
+thunar
+r
+gcc-fortran
+texlive-most 
+pandoc
+zsh
+yay
+starship
+python-pip
