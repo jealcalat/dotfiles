@@ -140,7 +140,8 @@ echo "$username ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/make" | sudo tee /
 sudo chmod 440 /etc/sudoers.d/$username
 
 # Install packages from the official repositories
-
+echo "--------------------------------------------"
+echo "Installing official packages..." 
 # Read the list of packages from a text file
 mapfile -t packages <official_packages
 
@@ -206,6 +207,10 @@ sudo mv dwm.desktop /usr/share/xsessions/
 echo "Installing dwm..."
 cd dwm || exit
 sudo -S make clean install
+
+# install radian
+echo "Installing radian..."
+pip install -U radian
 
 echo "All tasks completed successfully."
 
