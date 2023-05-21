@@ -75,14 +75,14 @@ enum
 	CurNormal,
 	CurResize,
 	CurMove,
-	CurResizeHorzArrow,
-	CurResizeVertArrow,
 	CurLast
 }; /* cursor */
 enum
 {
 	SchemeNorm,
-	SchemeSel
+	SchemeSel,
+	SchemeTitleNorm,
+	SchemeTitleSel
 }; /* color schemes */
 enum
 {
@@ -223,12 +223,6 @@ struct Systray
 	Client *icons;
 };
 
-typedef struct Systray   Systray;
-struct Systray {
-	Window win;
-	Client *icons;
-};
-
 /* function declarations */
 static void applyrules(Client *c);
 static int applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact);
@@ -251,7 +245,7 @@ static void detachstack(Client *c);
 static Monitor *dirtomon(int dir);
 static void drawbar(Monitor *m);
 static void drawbars(void);
-static int drawstatusbar(Monitor *m, int bh, char* text);
+static int drawstatusbar(Monitor *m, int bh, char *text);
 static void enternotify(XEvent *e);
 static void expose(XEvent *e);
 static void focus(Client *c);
@@ -337,7 +331,7 @@ static void zoom(const Arg *arg);
 /* variables */
 static Systray *systray = NULL;
 static const char broken[] = "broken";
-static char stext[256];
+static char stext[1024];
 static int screen;
 static int sw, sh;			/* X display screen geometry width, height */
 static int bh, blw = 0; /* bar geometry */
@@ -371,7 +365,8 @@ static Window root, wmcheckwin;
 
 /* configuration, allows nested code to access above variables */
 #include "config.h"
-
+#include "movestack.c"
+#include "tatami.c"
 /* compile-time check if all tags fit into an unsigned int bit array. */
 struct NumTags
 {
@@ -487,10 +482,6 @@ int applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact)
 	}
 	return *x != c->x || *y != c->y || *w != c->w || *h != c->h;
 }
-
-// #include "vanitygaps.c"
-#include "movestack.c"
-#include "tatami.c"
 
 void arrange(Monitor *m)
 {
@@ -609,7 +600,7 @@ void cleanup(void)
 
 	for (i = 0; i < CurLast; i++)
 		drw_cur_free(drw, cursor[i]);
-	for (i = 0; i < LENGTH(colors); i++)
+	for (i = 0; i < LENGTH(colors) + 1; i++)
 		free(scheme[i]);
 	free(scheme);
 	XDestroyWindow(dpy, wmcheckwin);
@@ -817,248 +808,6 @@ void configurerequest(XEvent *e)
 	XSync(dpy, False);
 }
 
-void dragmfact(const Arg *arg)
-{
-	unsigned int n;
-	int py, px;																						 // pointer coordinates
-	int ax, ay, aw, ah;																		 // area position, width and height
-	int center = 0, horizontal = 0, mirror = 0, fixed = 0; // layout configuration
-	double fact;
-	Monitor *m;
-	XEvent ev;
-	Time lasttime = 0;
-
-	m = selmon;
-
-#if VANITYGAPS_PATCH
-	int oh, ov, ih, iv;
-	getgaps(m, &oh, &ov, &ih, &iv, &n);
-#else
-	Client *c;
-	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++)
-		;
-#endif // VANITYGAPS_PATCH
-
-	ax = m->wx;
-	ay = m->wy;
-	ah = m->wh;
-	aw = m->ww;
-
-	if (!n)
-		return;
-#if FLEXTILE_DELUXE_LAYOUT
-	else if (m->lt[m->sellt]->arrange == &flextile)
-	{
-		int layout = m->ltaxis[LAYOUT];
-		if (layout < 0)
-		{
-			mirror = 1;
-			layout *= -1;
-		}
-		if (layout > FLOATING_MASTER)
-		{
-			layout -= FLOATING_MASTER;
-			fixed = 1;
-		}
-
-		if (layout == SPLIT_HORIZONTAL || layout == SPLIT_HORIZONTAL_DUAL_STACK)
-			horizontal = 1;
-		else if (layout == SPLIT_CENTERED_VERTICAL && (fixed || n - m->nmaster > 1))
-			center = 1;
-		else if (layout == FLOATING_MASTER)
-		{
-			center = 1;
-			if (aw < ah)
-				horizontal = 1;
-		}
-		else if (layout == SPLIT_CENTERED_HORIZONTAL)
-		{
-			if (fixed || n - m->nmaster > 1)
-				center = 1;
-			horizontal = 1;
-		}
-	}
-#endif // FLEXTILE_DELUXE_LAYOUT
-#if CENTEREDMASTER_LAYOUT
-	else if (m->lt[m->sellt]->arrange == &centeredmaster &&
-					 (fixed || n - m->nmaster > 1))
-		center = 1;
-#endif // CENTEREDMASTER_LAYOUT
-#if CENTEREDFLOATINGMASTER_LAYOUT
-	else if (m->lt[m->sellt]->arrange == &centeredfloatingmaster)
-		center = 1;
-#endif // CENTEREDFLOATINGMASTER_LAYOUT
-#if BSTACK_LAYOUT
-	else if (m->lt[m->sellt]->arrange == &bstack)
-		horizontal = 1;
-#endif // BSTACK_LAYOUT
-#if BSTACKHORIZ_LAYOUT
-	else if (m->lt[m->sellt]->arrange == &bstackhoriz)
-		horizontal = 1;
-#endif // BSTACKHORIZ_LAYOUT
-
-	/* do not allow mfact to be modified under certain conditions */
-	if (!m->lt[m->sellt]->arrange										 // floating layout
-			|| (!fixed && m->nmaster && n <= m->nmaster) // no master
-#if MONOCLE_LAYOUT
-			|| m->lt[m->sellt]->arrange == &monocle
-#endif // MONOCLE_LAYOUT
-#if GRIDMODE_LAYOUT
-			|| m->lt[m->sellt]->arrange == &grid
-#endif // GRIDMODE_LAYOUT
-#if HORIZGRID_LAYOUT
-			|| m->lt[m->sellt]->arrange == &horizgrid
-#endif // HORIZGRID_LAYOUT
-#if GAPPLESSGRID_LAYOUT
-			|| m->lt[m->sellt]->arrange == &gaplessgrid
-#endif // GAPPLESSGRID_LAYOUT
-#if NROWGRID_LAYOUT
-			|| m->lt[m->sellt]->arrange == &nrowgrid
-#endif // NROWGRID_LAYOUT
-#if FLEXTILE_DELUXE_LAYOUT
-			||
-			(m->lt[m->sellt]->arrange == &flextile && m->ltaxis[LAYOUT] == NO_SPLIT)
-#endif // FLEXTILE_DELUXE_LAYOUT
-	)
-		return;
-
-#if VANITYGAPS_PATCH
-	ay += oh;
-	ax += ov;
-	aw -= 2 * ov;
-	ah -= 2 * oh;
-#endif // VANITYGAPS_PATCH
-
-	if (center)
-	{
-		if (horizontal)
-		{
-			px = ax + aw / 2;
-#if VANITYGAPS_PATCH
-			py = ay + ah / 2 + (ah - 2 * ih) * (m->mfact / 2.0) + ih / 2;
-#else
-			py = ay + ah / 2 + ah * m->mfact / 2.0;
-#endif // VANITYGAPS_PATCH
-		}
-		else
-		{ // vertical split
-#if VANITYGAPS_PATCH
-			px = ax + aw / 2 + (aw - 2 * iv) * m->mfact / 2.0 + iv / 2;
-#else
-			px = ax + aw / 2 + aw * m->mfact / 2.0;
-#endif // VANITYGAPS_PATCH
-			py = ay + ah / 2;
-		}
-	}
-	else if (horizontal)
-	{
-		px = ax + aw / 2;
-		if (mirror)
-#if VANITYGAPS_PATCH
-			py = ay + (ah - ih) * (1.0 - m->mfact) + ih / 2;
-#else
-			py = ay + (ah * (1.0 - m->mfact));
-#endif // VANITYGAPS_PATCH
-		else
-#if VANITYGAPS_PATCH
-			py = ay + ((ah - ih) * m->mfact) + ih / 2;
-#else
-			py = ay + (ah * m->mfact);
-#endif // VANITYGAPS_PATCH
-	}
-	else
-	{ // vertical split
-		if (mirror)
-#if VANITYGAPS_PATCH
-			px = ax + (aw - iv) * (1.0 - m->mfact) + iv / 2;
-#else
-			px = ax + (aw * m->mfact);
-#endif // VANITYGAPS_PATCH
-		else
-#if VANITYGAPS_PATCH
-			px = ax + ((aw - iv) * m->mfact) + iv / 2;
-#else
-			px = ax + (aw * m->mfact);
-#endif // VANITYGAPS_PATCH
-		py = ay + ah / 2;
-	}
-
-	if (XGrabPointer(
-					dpy, root, False, MOUSEMASK, GrabModeAsync, GrabModeAsync, None,
-					cursor[horizontal ? CurResizeVertArrow : CurResizeHorzArrow]->cursor,
-					CurrentTime) != GrabSuccess)
-		return;
-	XWarpPointer(dpy, None, root, 0, 0, 0, 0, px, py);
-
-	do
-	{
-		XMaskEvent(dpy, MOUSEMASK | ExposureMask | SubstructureRedirectMask, &ev);
-		switch (ev.type)
-		{
-		case ConfigureRequest:
-		case Expose:
-		case MapRequest:
-			handler[ev.type](&ev);
-			break;
-		case MotionNotify:
-			if ((ev.xmotion.time - lasttime) <= (1000 / 40))
-				continue;
-			if (lasttime != 0)
-			{
-				px = ev.xmotion.x;
-				py = ev.xmotion.y;
-			}
-			lasttime = ev.xmotion.time;
-
-#if VANITYGAPS_PATCH
-			if (center)
-				if (horizontal)
-					if (py - ay > ah / 2)
-						fact = (double)1.0 -
-									 (ay + ah - py - ih / 2) * 2 / (double)(ah - 2 * ih);
-					else
-						fact = (double)1.0 - (py - ay - ih / 2) * 2 / (double)(ah - 2 * ih);
-				else if (px - ax > aw / 2)
-					fact =
-							(double)1.0 - (ax + aw - px - iv / 2) * 2 / (double)(aw - 2 * iv);
-				else
-					fact = (double)1.0 - (px - ax - iv / 2) * 2 / (double)(aw - 2 * iv);
-			else if (horizontal)
-				fact = (double)(py - ay - ih / 2) / (double)(ah - ih);
-			else
-				fact = (double)(px - ax - iv / 2) / (double)(aw - iv);
-#else
-			if (center)
-				if (horizontal)
-					if (py - ay > ah / 2)
-						fact = (double)1.0 - (ay + ah - py) * 2 / (double)ah;
-					else
-						fact = (double)1.0 - (py - ay) * 2 / (double)ah;
-				else if (px - ax > aw / 2)
-					fact = (double)1.0 - (ax + aw - px) * 2 / (double)aw;
-				else
-					fact = (double)1.0 - (px - ax) * 2 / (double)aw;
-			else if (horizontal)
-				fact = (double)(py - ay) / (double)ah;
-			else
-				fact = (double)(px - ax) / (double)aw;
-#endif // VANITYGAPS_PATCH
-
-			if (!center && mirror)
-				fact = 1.0 - fact;
-
-			setmfact(&((Arg){.f = 1.0 + fact}));
-			px = ev.xmotion.x;
-			py = ev.xmotion.y;
-			break;
-		}
-	} while (ev.type != ButtonRelease);
-
-	XUngrabPointer(dpy, CurrentTime);
-	while (XCheckMaskEvent(dpy, EnterWindowMask, &ev))
-		;
-}
-
 Monitor *
 createmon(void)
 {
@@ -1136,6 +885,132 @@ dirtomon(int dir)
 	return m;
 }
 
+int drawstatusbar(Monitor *m, int bh, char *stext)
+{
+	int ret, i, w, x, len;
+	short isCode = 0;
+	char *text;
+	char *p;
+
+	len = strlen(stext) + 1;
+	if (!(text = (char *)malloc(sizeof(char) * len)))
+		die("malloc");
+	p = text;
+	memcpy(text, stext, len);
+
+	/* compute width of the status text */
+	w = 0;
+	i = -1;
+	while (text[++i])
+	{
+		if (text[i] == '^')
+		{
+			if (!isCode)
+			{
+				isCode = 1;
+				text[i] = '\0';
+				w += TEXTW(text) - lrpad;
+				text[i] = '^';
+				if (text[++i] == 'f')
+					w += atoi(text + ++i);
+			}
+			else
+			{
+				isCode = 0;
+				text = text + i + 1;
+				i = -1;
+			}
+		}
+	}
+	if (!isCode)
+		w += TEXTW(text) - lrpad;
+	else
+		isCode = 0;
+	text = p;
+
+	w += 2; /* 1px padding on both sides */
+	ret = x = m->ww - w;
+
+	drw_setscheme(drw, scheme[LENGTH(colors)]);
+	drw->scheme[ColFg] = scheme[SchemeNorm][ColFg];
+	drw->scheme[ColBg] = scheme[SchemeNorm][ColBg];
+	drw_rect(drw, x, 0, w, bh, 1, 1);
+	x++;
+
+	/* process status text */
+	i = -1;
+	while (text[++i])
+	{
+		if (text[i] == '^' && !isCode)
+		{
+			isCode = 1;
+
+			text[i] = '\0';
+			w = TEXTW(text) - lrpad;
+			drw_text(drw, x, 0, w, bh, 0, text, 0);
+
+			x += w;
+
+			/* process code */
+			while (text[++i] != '^')
+			{
+				if (text[i] == 'c')
+				{
+					char buf[8];
+					memcpy(buf, (char *)text + i + 1, 7);
+					buf[7] = '\0';
+					drw_clr_create(drw, &drw->scheme[ColFg], buf);
+					i += 7;
+				}
+				else if (text[i] == 'b')
+				{
+					char buf[8];
+					memcpy(buf, (char *)text + i + 1, 7);
+					buf[7] = '\0';
+					drw_clr_create(drw, &drw->scheme[ColBg], buf);
+					i += 7;
+				}
+				else if (text[i] == 'd')
+				{
+					drw->scheme[ColFg] = scheme[SchemeNorm][ColFg];
+					drw->scheme[ColBg] = scheme[SchemeNorm][ColBg];
+				}
+				else if (text[i] == 'r')
+				{
+					int rx = atoi(text + ++i);
+					while (text[++i] != ',')
+						;
+					int ry = atoi(text + ++i);
+					while (text[++i] != ',')
+						;
+					int rw = atoi(text + ++i);
+					while (text[++i] != ',')
+						;
+					int rh = atoi(text + ++i);
+					drw_rect(drw, rx + x, ry, rw, rh, 1, 0);
+				}
+				else if (text[i] == 'f')
+				{
+					x += atoi(text + ++i);
+				}
+			}
+			text = text + i + 1;
+			i = -1;
+			isCode = 0;
+		}
+	}
+	if (!isCode)
+	{
+		w = TEXTW(text) - lrpad;
+		drw_text(drw, x, 0, w, bh, 0, text, 0);
+	}
+
+	drw_setscheme(drw, scheme[SchemeNorm]);
+	free(p);
+
+	return ret;
+}
+
 void drawbar(Monitor *m)
 {
 	int x, w, tw = 0, stw = 0;
@@ -1153,9 +1028,10 @@ void drawbar(Monitor *m)
 	/* draw status first so it can be overdrawn by tags later */
 	if (m == selmon)
 	{ /* status is only drawn on selected monitor */
-		drw_setscheme(drw, scheme[SchemeNorm]);
-		tw = TEXTW(stext) - lrpad / 2 + 2; /* 2px extra right padding */
-		drw_text(drw, m->ww - tw - stw, 0, tw, bh, lrpad / 2 - 2, stext, 0);
+		// drw_setscheme(drw, scheme[SchemeNorm]);
+		// tw = TEXTW(stext) - lrpad / 2 + 2; /* 2px extra right padding */
+		// drw_text(drw, m->ww - tw - stw, 0, tw, bh, lrpad / 2 - 2, stext, 0);
+		tw = m->ww - drawstatusbar(m, bh, stext);
 	}
 
 	resizebarwin(m);
@@ -1409,53 +1285,6 @@ int gettextprop(Window w, Atom atom, char *text, unsigned int size)
 	return 1;
 }
 
-int fake_signal(void)
-{
-	char fsignal[256];
-	char indicator[9] = "fsignal:";
-	char str_sig[50];
-	char param[16];
-	int i, len_str_sig, n, paramn;
-	size_t len_fsignal, len_indicator = strlen(indicator);
-	Arg arg;
-
-	// Get root name property
-	if (gettextprop(root, XA_WM_NAME, fsignal, sizeof(fsignal)))
-	{
-		len_fsignal = strlen(fsignal);
-
-		// Check if this is indeed a fake signal
-		if (len_indicator > len_fsignal ? 0 : strncmp(indicator, fsignal, len_indicator) == 0)
-		{
-			paramn = sscanf(fsignal + len_indicator, "%s%n%s%n", str_sig, &len_str_sig, param, &n);
-
-			if (paramn == 1)
-				arg = (Arg){0};
-			else if (paramn > 2)
-				return 1;
-			else if (strncmp(param, "i", n - len_str_sig) == 0)
-				sscanf(fsignal + len_indicator + n, "%i", &(arg.i));
-			else if (strncmp(param, "ui", n - len_str_sig) == 0)
-				sscanf(fsignal + len_indicator + n, "%u", &(arg.ui));
-			else if (strncmp(param, "f", n - len_str_sig) == 0)
-				sscanf(fsignal + len_indicator + n, "%f", &(arg.f));
-			else
-				return 1;
-
-			// Check if a signal was found, and if so handle it
-			for (i = 0; i < LENGTH(signals); i++)
-				if (strncmp(str_sig, signals[i].sig, len_str_sig) == 0 && signals[i].func)
-					signals[i].func(&(arg));
-
-			// A fake signal was sent
-			return 1;
-		}
-	}
-
-	// No fake signal was sent, so proceed with update
-	return 0;
-}
-
 void grabbuttons(Client *c, int focused)
 {
 	updatenumlockmask();
@@ -1523,6 +1352,53 @@ void keypress(XEvent *e)
 			keys[i].func(&(keys[i].arg));
 }
 
+int fake_signal(void)
+{
+	char fsignal[256];
+	char indicator[9] = "fsignal:";
+	char str_sig[50];
+	char param[16];
+	int i, len_str_sig, n, paramn;
+	size_t len_fsignal, len_indicator = strlen(indicator);
+	Arg arg;
+
+	// Get root name property
+	if (gettextprop(root, XA_WM_NAME, fsignal, sizeof(fsignal)))
+	{
+		len_fsignal = strlen(fsignal);
+
+		// Check if this is indeed a fake signal
+		if (len_indicator > len_fsignal ? 0 : strncmp(indicator, fsignal, len_indicator) == 0)
+		{
+			paramn = sscanf(fsignal + len_indicator, "%s%n%s%n", str_sig, &len_str_sig, param, &n);
+
+			if (paramn == 1)
+				arg = (Arg){0};
+			else if (paramn > 2)
+				return 1;
+			else if (strncmp(param, "i", n - len_str_sig) == 0)
+				sscanf(fsignal + len_indicator + n, "%i", &(arg.i));
+			else if (strncmp(param, "ui", n - len_str_sig) == 0)
+				sscanf(fsignal + len_indicator + n, "%u", &(arg.ui));
+			else if (strncmp(param, "f", n - len_str_sig) == 0)
+				sscanf(fsignal + len_indicator + n, "%f", &(arg.f));
+			else
+				return 1;
+
+			// Check if a signal was found, and if so handle it
+			for (i = 0; i < LENGTH(signals); i++)
+				if (strncmp(str_sig, signals[i].sig, len_str_sig) == 0 && signals[i].func)
+					signals[i].func(&(arg));
+
+			// A fake signal was sent
+			return 1;
+		}
+	}
+
+	// No fake signal was sent, so proceed with update
+	return 0;
+}
+
 void killclient(const Arg *arg)
 {
 	if (!selmon->sel)
@@ -1547,11 +1423,13 @@ void layoutmenu(const Arg *arg)
 	int i;
 
 	if (!(p = popen(layoutswitcher[0], "r")))
+
 		return;
 	s = fgets(c, sizeof(c), p);
 	pclose(p);
 
-	if (!s || *s == '\0' || c == '\0')
+	if (!s || *s == '\0' || *c == '\0')
+
 		return;
 
 	i = atoi(c);
@@ -1778,18 +1656,7 @@ void propertynotify(XEvent *e)
 		updatesystray();
 	}
 
-	if ((c = wintosystrayicon(ev->window))) {
-		if (ev->atom == XA_WM_NORMAL_HINTS) {
-			updatesizehints(c);
-			updatesystrayicongeom(c, c->w, c->h);
-		}
-		else
-			updatesystrayiconstate(c, ev);
-		resizebarwin(selmon);
-		updatesystray();
-	}
-
-    if ((ev->window == root) && (ev->atom == XA_WM_NAME))
+	if ((ev->window == root) && (ev->atom == XA_WM_NAME))
 		updatestatus();
 	else if (ev->state == PropertyDelete)
 		return; /* ignore */
@@ -2210,9 +2077,11 @@ void setup(void)
 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
 	/* init appearance */
-	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
+	scheme = ecalloc(LENGTH(colors) + 1, sizeof(Clr *));
+	// scheme[LENGTH(colors)] = drw_scm_create(drw, colors, 3);
+	scheme[LENGTH(colors)] = drw_scm_create(drw, (const char **)colors[0], 4);
 	for (i = 0; i < LENGTH(colors); i++)
-		scheme[i] = drw_scm_create(drw, colors[i], 3);
+		scheme[i] = drw_scm_create(drw, (const char **)colors[i], 4);
 	/* init system tray */
 	updatesystray();
 	/* init bars */
@@ -2880,16 +2749,6 @@ wintosystrayicon(Window w)
 		return i;
 	for (i = systray->icons; i && i->win != w; i = i->next)
 		;
-	return i;
-}
-
-Client *
-wintosystrayicon(Window w) {
-	Client *i = NULL;
-
-	if (!showsystray || !w)
-		return i;
-	for (i = systray->icons; i && i->win != w; i = i->next) ;
 	return i;
 }
 

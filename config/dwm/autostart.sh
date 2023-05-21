@@ -26,17 +26,18 @@ ksuperkey -e 'Super_L=Alt_L|F1' &
 ksuperkey -e 'Super_R=Alt_L|F1' &
 
 # Restore wallpaper
-hsetroot -cover /home/$USER/.config/dwm/wallpapers/lain4.jpg
+hsetroot -cover /home/mrrobot/.config/dwm/wallpapers/keyboards.jpg
 
 # Lauch dwmbar
-# /home/$USER/.config/dwm/dwmbar.sh &
-# /home/$USER/Documents/GitHub/dotfiles/dwm/PowerBar-dwm-main/PowerBar.sh &
-/home/$USER/.config/dwm/dwm-bar_joestandring/dwm_bar.sh &
+# /home/mrrobot/.config/dwm/dwmbar.sh &
+/home/mrrobot/.config/dwm/PowerBarColor.sh &
+# /home/mrrobot/.config/dwm/PowerBar.sh &
+# /home/mrrobot/.config/dwm/dwm-bar_joestandring/dwm_bar.sh &
 # Lauch notification daemon
-/home/$USER/.config/dwm/dwmdunst.sh
+/home/mrrobot/.config/dwm/dwmdunst.sh
 
 # Lauch compositor
-/home/$USER/.config/dwm/dwmcomp.sh
+/home/mrrobot/.config/dwm/dwmcomp.sh
 
 # Start mpd
 # exec mpd &
@@ -47,8 +48,11 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 
 ## Add your autostart programs here --------------
 sxhkd &
-(sleep 5 && dropbox) &
-(sleep 15 && ibus) &
+udiskie &
+(sleep 20s && dropbox) &
+(sleep 20s && megasync) &
+(sleep 5s && setxkbmap -layout es) &
+
 ## -----------------------------------------------
 
 # Launch DWM

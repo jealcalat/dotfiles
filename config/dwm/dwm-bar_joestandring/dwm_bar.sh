@@ -21,6 +21,8 @@ export IDENTIFIER="unicode"
 export SEP1="["
 export SEP2="]"
 
+yellow="^c#3b414d^ ^b#D79921^"
+
 # Import the modules
 #. "$DIR/bar-functions/dwm_alarm.sh"
 . "$DIR/bar-functions/dwm_alsa.sh"
@@ -48,26 +50,25 @@ export SEP2="]"
 #. "$DIR/bar-functions/dwm_weather.sh"
 
 #parallelize() {
-    #while true
-    #do
-        #printf "Running parallel processes\n"
-        ##dwm_networkmanager &
-        ##dwm_weather &
-        #sleep 5
-    #done
+#while true
+#do
+#printf "Running parallel processes\n"
+##dwm_networkmanager &
+##dwm_weather &
+#sleep 5
+#done
 #}
 #parallelize &
 
 # Update dwm status bar every second
-while true
-do
+while true; do
     # Append results of each func one by one to the upperbar string
-    upperbar=""
+    upperbar="^c#3b414d^ ^b#D79921^"
     #upperbar="$upperbar$(dwm_alarm)"
-    upperbar="$upperbar$(dwm_spotify)"
-    upperbar="$upperbar$(dwm_alsa)"
-    upperbar="$upperbar$(dwm_backlight)"
-    upperbar="$upperbar$(batteries_t480)"
+    upperbar="$upperbar$(dwm_spotify)^d^"
+    upperbar="$upperbar^c#AD3B14^ ^b#FBF0C9^$(dwm_alsa)^d^"
+    #upperbar="$upperbar$(dwm_backlight)"
+    #upperbar="$upperbar$(batteries_t480)"
     #upperbar="$upperbar$(dwm_battery)"
     #upperbar="$upperbar$(dwm_ccurse)"
     #upperbar="$upperbar$(dwm_cmus)"
@@ -79,20 +80,20 @@ do
     #upperbar="$upperbar$(dwm_mail)"
     #upperbar="$upperbar$(dwm_mpc)"
     #upperbar="$upperbar$(dwm_pulse)"
-    upperbar="$upperbar$(dwm_resources)"
-    upperbar="$upperbar$(wlan)"
-    upperbar="$upperbar$(check_updates)"
-    upperbar="$upperbar$(dwm_date)"
-    #upperbar="$upperbar$(dwm_transmission)"
+    upperbar="$upperbar^c#3b414d^ ^b#D79921^$(dwm_resources)^d^"
+    upperbar="$upperbar^c#AD3B14^ ^b#FBF0C9^$(wlan)^d^"
+    upperbar="$upperbar^c#3b414d^ ^b#FBF0C9^$(check_updates)^d^"
+    upperbar="$upperbar^c#AD3B14^ ^b#FBF0C9^$(dwm_date)^d^"
+    #upperbar="$upperbar$(dwm_transmission)^d^"
     #upperbar="$upperbar$(dwm_vpn)"
     #upperbar="$upperbar${__DWM_BAR_NETWORKMANAGER__}"
     #upperbar="$upperbar${__DWM_BAR_WEATHER__}"
-   
+
     # Append results of each func one by one to the lowerbar string
     lowerbar=""
-    
+
     xsetroot -name "$upperbar"
-    # Uncomment the line below to enable the lowerbar 
+    # Uncomment the line below to enable the lowerbar
     #xsetroot -name "$upperbar;$lowerbar"
     sleep 1
 done

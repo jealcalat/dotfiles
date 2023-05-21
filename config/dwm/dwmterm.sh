@@ -5,7 +5,7 @@
 
 ## launch alacritty with i3wm config
 
-CONFIG="/home/$USER/.config/dwm/alacritty/alacritty.yml"
+CONFIG="/home/mrrobot/.config/dwm/alacritty/alacritty.yml"
 
 if [ "$1" == "--float" ]; then
 	alacritty --class 'alacritty-float,alacritty-float' --config-file "$CONFIG"

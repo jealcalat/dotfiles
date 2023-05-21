@@ -4,7 +4,7 @@
 ## Everyone is permitted to copy and distribute copies of this file under GNU-GPL3
 
 ## rofi sudo askpass helper
-export SUDO_ASKPASS=/home/$USER/.config/dwm/askpass.sh
+export SUDO_ASKPASS=/home/mrrobot/.config/dwm/askpass.sh
 
 ## execute the application
 sudo -A $1

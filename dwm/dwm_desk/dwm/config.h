@@ -25,14 +25,32 @@ static const char col_blue[] = "#3967B0";
 static const char col_red[] = "#8E0425";
 static const char col_berm[] = "#C24B3B";
 
-static const char *colors[][3] = {
-		/*               fg         bg         border   */
-		[SchemeNorm] = {col_berm, col_black, col_red},
-		[SchemeSel] = {col_gray4, col_blue, col_cyan},
-};
+#include "gruvbox.h"
+// static const char *colors[][3] = {
+// 		/*               fg         bg         border   */
+// 		[SchemeNorm] = {col_berm, col_black, col_red},
+// 		[SchemeSel] = {col_gray4, col_blue, col_cyan},
+// };
+
+static char *colors[][4] = {
+		/*                        fg                bg                border                float */
+		[SchemeNorm] = {normfgcolor, normbgcolor, normbordercolor, normfloatcolor},
+		[SchemeSel] = {selfgcolor, selbgcolor, selbordercolor, selfloatcolor},
+		[SchemeTitleNorm] = {titlenormfgcolor, titlenormbgcolor, titlenormbordercolor, titlenormfloatcolor},
+		[SchemeTitleSel] = {titleselfgcolor, titleselbgcolor, titleselbordercolor, titleselfloatcolor}};
 
 /* tagging */
 static char *tags[] = {"", "", "", "", "", "", "", ""};
+
+static const char *tagsel[][2] = {
+		{"#1d2021", "#83a598"},
+		{"#ffffff", "#ff7f00"},
+		{"#000000", "#ffff00"},
+		{"#000000", "#fabd2f"},
+		{"#ffffff", "#292929"},
+		{"#D69821", "#1D2021"},
+		{"#3C3836", "#BCAD92"},
+		{"#000000", "#ffffff"}};
 
 /* ******************** Window Rules ******************** */
 static const Rule rules[] = {
@@ -94,42 +112,42 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = {"dmenu", NULL};
 
 /* Launch Apps */
-static const char *stcmd[] = {"/home/$USER/.config/dwm/dwmterm.sh", NULL};
-static const char *termcmd[] = {"/home/$USER/.config/dwm/dwmterm.sh", NULL};
-static const char *floatterm[] = {"/home/$USER/.config/dwm/dwmterm.sh", "--float", NULL};
-static const char *fmcmd[] = {"/home/$USER/.config/dwm/dwmapps.sh", "--file", NULL};
-static const char *editcmd[] = {"/home/$USER/.config/dwm/dwmapps.sh", "--editor", NULL};
-static const char *webcmd[] = {"/home/$USER/.config/dwm/dwmapps.sh", "--web", NULL};
+static const char *stcmd[] = {"/home/mrrobot/.config/dwm/dwmterm.sh", NULL};
+static const char *termcmd[] = {"/home/mrrobot/.config/dwm/dwmterm.sh", NULL};
+static const char *floatterm[] = {"/home/mrrobot/.config/dwm/dwmterm.sh", "--float", NULL};
+static const char *fmcmd[] = {"/home/mrrobot/.config/dwm/dwmapps.sh", "--file", NULL};
+static const char *editcmd[] = {"/home/mrrobot/.config/dwm/dwmapps.sh", "--editor", NULL};
+static const char *webcmd[] = {"/home/mrrobot/.config/dwm/dwmapps.sh", "--web", NULL};
 
 /* Rofi Menus */
-static const char *rofi_cmd[] = {"/home/$USER/.config/dwm/rofi/bin/launcher", NULL};
-static const char *rofi_rootcmd[] = {"/home/$USER/.config/dwm/rofi/bin/asroot", NULL};
-static const char *rofi_layoutcmd[] = {"/home/$USER/.config/dwm/rofi/bin/layouts", NULL};
-static const char *rofi_mpdcmd[] = {"/home/$USER/.config/dwm/rofi/bin/mpd", NULL};
-static const char *rofi_nmcmd[] = {"/home/$USER/.config/dwm/rofi/bin/network_menu", NULL};
-static const char *rofi_powercmd[] = {"/home/$USER/.config/dwm/rofi/bin/powermenu", NULL};
-static const char *rofi_shotcmd[] = {"/home/$USER/.config/dwm/rofi/bin/screenshot", NULL};
-static const char *rofi_wincmd[] = {"/home/$USER/.config/dwm/rofi/bin/windows", NULL};
+static const char *rofi_cmd[] = {"/home/mrrobot/.config/dwm/rofi/bin/launcher", NULL};
+static const char *rofi_rootcmd[] = {"/home/mrrobot/.config/dwm/rofi/bin/asroot", NULL};
+static const char *rofi_layoutcmd[] = {"/home/mrrobot/.config/dwm/rofi/bin/layouts", NULL};
+static const char *rofi_mpdcmd[] = {"/home/mrrobot/.config/dwm/rofi/bin/mpd", NULL};
+static const char *rofi_nmcmd[] = {"/home/mrrobot/.config/dwm/rofi/bin/network_menu", NULL};
+static const char *rofi_powercmd[] = {"/home/mrrobot/.config/dwm/rofi/bin/powermenu", NULL};
+static const char *rofi_shotcmd[] = {"/home/mrrobot/.config/dwm/rofi/bin/screenshot", NULL};
+static const char *rofi_wincmd[] = {"/home/mrrobot/.config/dwm/rofi/bin/windows", NULL};
 
 /* Misc */
-static const char *cpickcmd[] = {"/home/$USER/.local/bin/color-gpick", NULL};
-static const char *lockcmd[] = {"/home/$USER/.local/bin/betterlockscreen", "--lock", NULL};
-static const char *layoutswitcher[] = {"/home/$USER/.config/dwm/bin/layoutmenu.sh", NULL};
+static const char *cpickcmd[] = {"/home/mrrobot/.local/bin/color-gpick", NULL};
+static const char *lockcmd[] = {"/home/mrrobot/.local/bin/betterlockscreen", "--lock", NULL};
+static const char *layoutswitcher[] = {"/home/mrrobot/.config/dwm/bin/layoutmenu.sh", NULL};
 
 /* Hardware keys for volume and brightness */
 #include <X11/XF86keysym.h>
-static const char *mutevol[] = {"/home/$USER/.local/bin/volume", "--toggle", NULL};
-static const char *upvol[] = {"/home/$USER/.local/bin/volume", "--inc", NULL};
-static const char *downvol[] = {"/home/$USER/.local/bin/volume", "--dec", NULL};
-static const char *upbl[] = {"/home/$USER/.local/bin/brightness", "--inc", NULL};
-static const char *downbl[] = {"/home/$USER/.local/bin/brightness", "--dec", NULL};
+static const char *mutevol[] = {"/home/mrrobot/.local/bin/volume", "--toggle", NULL};
+static const char *upvol[] = {"/home/mrrobot/.local/bin/volume", "--inc", NULL};
+static const char *downvol[] = {"/home/mrrobot/.local/bin/volume", "--dec", NULL};
+static const char *upbl[] = {"/home/mrrobot/.local/bin/brightness", "--inc", NULL};
+static const char *downbl[] = {"/home/mrrobot/.local/bin/brightness", "--dec", NULL};
 
 /* Screenshot */
-static const char *shotnow[] = {"/home/$USER/.local/bin/takeshot", "--now", NULL};
-static const char *shotin5[] = {"/home/$USER/.local/bin/takeshot", "--in5", NULL};
-static const char *shotin10[] = {"/home/$USER/.local/bin/takeshot", "--in10", NULL};
-static const char *shotwin[] = {"/home/$USER/.local/bin/takeshot", "--win", NULL};
-static const char *shotarea[] = {"/home/$USER/.local/bin/takeshot", "--area", NULL};
+static const char *shotnow[] = {"/home/mrrobot/.local/bin/takeshot", "--now", NULL};
+static const char *shotin5[] = {"/home/mrrobot/.local/bin/takeshot", "--in5", NULL};
+static const char *shotin10[] = {"/home/mrrobot/.local/bin/takeshot", "--in10", NULL};
+static const char *shotwin[] = {"/home/mrrobot/.local/bin/takeshot", "--win", NULL};
+static const char *shotarea[] = {"/home/mrrobot/.local/bin/takeshot", "--area", NULL};
 
 /* ******************** Keybindings ******************** */
 static Key keys[] = {

@@ -5,7 +5,7 @@
 # GNU GPLv3
 
 df_check_location='/home'
-PREFIX_FILESYSTEM=''
+PREFIX_FILESYSTEM='🖴'
 dwm_resources () {
 	# get all the infos first to avoid high resources usage
 	free_output=$(free -h | grep Mem)
