@@ -36,7 +36,7 @@ git commit -m "$COMMIT_MSG"
 # Push changes to GitHub using the token
 # Replace 'origin' with the name of the remote repository if it's not 'origin'
 # Replace 'main' with the name of the branch you want to push to if it's not 'main'
-git push origin main --set-upstream "https://github.com/$GH_USERNAME/$GH_REPOSITORY.git" <<EOF
+git push origin main --set-upstream "https://github.com/$GH_USERNAME/$GH_REPOSITORY" <<EOF
 $GH_TOKEN
 EOF
 
