@@ -26,7 +26,7 @@ git commit -m "$COMMIT_MSG"
 # Push changes to GitHub
 # Replace 'origin' with the name of the remote repository if it's not 'origin'
 # Replace 'master' with the name of the branch you want to push to if it's not 'master'
-git push origin master
+git push origin main
 
 # Shut down the computer
 # sudo shutdown -h now
