@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Replace the below path with the path to your scripts directory
-SCRIPTS_DIRECTORY="/home/$USER/.screenlayout"
+SCRIPTS_DIRECTORY="/home/$USER/.local/bin/screenlayout"
 
 function show_menu() {
     echo "Please select a script to run:"
@@ -18,7 +18,7 @@ while true; do
     show_menu
     read -p "Enter your choice: " choice
 
-    if [ "$choice" -eq "${#script_list[@]}+1" ] 2>/dev/null; then
+    if [ "$choice" -eq "$((${#script_list[@]}+1))" ] 2>/dev/null; then
         echo "Exiting..."
         exit 0
     elif [ "$choice" -ge 1 ] 2>/dev/null && [ "$choice" -le "${#script_list[@]}" ] 2>/dev/null; then

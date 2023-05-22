@@ -25,9 +25,13 @@ tk
 thunar
 r
 gcc-fortran
-texlive-most 
+texlive-most
 pandoc
 zsh
 yay
 starship
 python-pip
+ueberzug
+inkscape
+v4l-utils
+flameshot
