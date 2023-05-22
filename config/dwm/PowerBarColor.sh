@@ -37,8 +37,29 @@ DMY() {
 }
 
 hour() {
-  Hour="$(date '+%H:%M:%S')" #time in HH:MM:SS format
-  printf "%s%s" "$(echo -e ^c$color6^ )^d^" "$(echo -e ^c$color3^^b$color6^ "" $Hour)"
+
+  clock=$(date '+%I')
+
+  case "$clock" in
+  "00") icon="🕛" ;;
+  "01") icon="🕐" ;;
+  "02") icon="🕑" ;;
+  "03") icon="🕒" ;;
+  "04") icon="🕓" ;;
+  "05") icon="🕔" ;;
+  "06") icon="🕕" ;;
+  "07") icon="🕖" ;;
+  "08") icon="🕗" ;;
+  "09") icon="🕘" ;;
+  "10") icon="🕙" ;;
+  "11") icon="🕚" ;;
+  "12") icon="🕛" ;;
+  esac
+
+  HOUR=$(date "+ %I:%M%p")
+
+  # Hour="$(date '+%H:%M:%S')" #time in HH:MM:SS format
+  printf "%s%s" "$(echo -e ^c$color6^ )^d^" "$(echo -e ^c$color3^^b$color6^ $icon $HOUR)"
 }
 
 datetime() {
@@ -163,9 +184,52 @@ batteries_t480() {
   fi
 }
 
-process() {
-  cpu="$(ps -eo pcpu | awk 'BEGIN {sum=0.0f} {sum+=$1} END {printf "%.0f", sum}')"
-  printf "%s%s" "$(echo -e ^c$color10^ $powerline_h)^d^" "$(echo -e ^c$color17^^b$color10^ "" $cpu'%')"
+# By Luke Smith
+# Module showing CPU load as a changing bars.
+# Just like in polybar.
+# Each bar represents amount of load on one core since
+# last run.
+
+# Cache in tmpfs to improve speed and reduce SSD load
+
+cpu_usage() {
+  cache=/tmp/cpubarscache
+
+  case $BLOCK_BUTTON in
+  2) setsid -f "$TERMINAL" -e htop ;;
+  3) notify-send "🪨 CPU load module" "Each bar represents
+one CPU core" ;;
+  6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+  esac
+
+  # id total idle
+  stats=$(awk '/cpu[0-9]+/ {printf "%d %d %d\n", substr($1,4), ($2 + $3 + $4 + $5), $5 }' /proc/stat)
+  [ ! -f $cache ] && echo "$stats" >"$cache"
+  old=$(cat "$cache")
+  printf "🪨"
+  echo "$stats" | while read -r row; do
+    id=${row%% *}
+    rest=${row#* }
+    total=${rest%% *}
+    idle=${rest##* }
+
+    case "$(echo "$old" | awk '{if ($1 == id)
+		printf "%d\n", (1 - (idle - $3)  / (total - $2))*100 /12.5}' \
+      id="$id" total="$total" idle="$idle")" in
+
+    "0") printf "▁" ;;
+    "1") printf "▂" ;;
+    "2") printf "▃" ;;
+    "3") printf "▄" ;;
+    "4") printf "▅" ;;
+    "5") printf "▆" ;;
+    "6") printf "▇" ;;
+    "7") printf "█" ;;
+    "8") printf "█" ;;
+    esac
+  done
+  printf "\\n"
+  echo "$stats" >"$cache"
 }
 
 PREFIX=' '
@@ -212,43 +276,24 @@ dwm_spotify() {
     SHUFFLE=$(playerctl shuffle)
 
     if [ "$IDENTIFIER" = "unicode" ]; then
-      if [ "$STATUS" = "Playing" ]; then
-        STATUS="▶"
-      else
-        STATUS="⏸"
-      fi
-      if [ "$SHUFFLE" = "On" ]; then
-        SHUFFLE="  "
-      else
-        SHUFFLE=""
-      fi
+      [ "$STATUS" = "Playing" ] && STATUS="▶" || STATUS="⏸"
+      [ "$SHUFFLE" = "On" ] && SHUFFLE="  " || SHUFFLE=""
     else
-      if [ "$STATUS" = "Playing" ]; then
-        STATUS="PLA"
-      else
-        STATUS="PAU"
-      fi
-      if [ "$SHUFFLE" = "On" ]; then
-        SHUFFLE=" SHF ON"
-      else
-        SHUFFLE=""
-      fi
+      [ "$STATUS" = "Playing" ] && STATUS="PLA" || STATUS="PAU"
+      [ "$SHUFFLE" = "On" ] && SHUFFLE=" SHF ON" || SHUFFLE=""
     fi
 
-    printf "%s%s %s-%s" "^c$color11^$powerline_h^d^" "^c$color1^^b$color11^$STATUS" "${ARTIST:0:14}" "${TRACK:0:9}..."
-    printf "%0d:%02d/" $((POSITION % 3600 / 60)) $((POSITION % 60))
-    printf "%0d:%02d" $((DURATION % 3600 / 60)) $((DURATION % 60))
-    printf "%s" "$SHUFFLE "
+    printf "♫ %s%s %s-%s %02d:%02d/%02d:%02d%s\n" "^c$color11^$powerline_h^d^" "^c$color1^^b$color11^$STATUS" "${ARTIST:0:14}" "${TRACK:0:9}..." $((POSITION % 3600 / 60)) $((POSITION % 60)) $((DURATION % 3600 / 60)) $((DURATION % 60)) "$SHUFFLE"
   fi
 }
 
 sys_tray_space() {
-  printf "%s%s" "$powerline_s" "    "
+  printf "       "
 }
 
 #update every 30 seconds
 while true; do
-  xsetroot -name "$(dwm_spotify) $(batteries_t480) $(get_cputemp) $(process) $(memory) $(get_disk) $(updates) $(dwm_alsa) $(datetime) $(sys_tray_space)"
+  xsetroot -name "$(dwm_spotify) $(batteries_t480) $(get_cputemp)|CPUs: $(cpu_usage) $(memory) $(get_disk) $(updates) $(dwm_alsa) $(datetime) $(sys_tray_space) "
 
   sleep 1
 done

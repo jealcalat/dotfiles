@@ -51,7 +51,7 @@ sxhkd &
 udiskie &
 (sleep 20s && dropbox) &
 (sleep 20s && megasync) &
-(sleep 5s && setxkbmap -layout es) &
+(sleep 2s && setxkbmap -layout es) &
 
 ## -----------------------------------------------
 
