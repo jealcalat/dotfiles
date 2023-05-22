@@ -1,17 +1,27 @@
 #!/bin/bash
 
+# Set your GitHub username
+echo "Write your user name: "
+read GH_USERNAME
+
+# Set your GitHub repository name
+echo "Write your repository name: "
+read GH_REPOSITORY
+
 # Set the repository directory
 REPO_DIR=$1
 
 # Set your commit message
 COMMIT_MSG=$2
 
+# Set the sleep time in seconds
+SLEEP_TIME=$4
+
 # Set your GitHub token
 GH_TOKEN=$3
 
-SLEEP_TIME=$4
-
 # Wait for $SLEEP_TIME seconds
+
 sleep $SLEEP_TIME
 
 # Navigate to your repository
@@ -23,10 +33,12 @@ git add .
 # Commit with your custom message
 git commit -m "$COMMIT_MSG"
 
-# Push changes to GitHub
+# Push changes to GitHub using the token
 # Replace 'origin' with the name of the remote repository if it's not 'origin'
-# Replace 'master' with the name of the branch you want to push to if it's not 'master'
-git push origin main
+# Replace 'main' with the name of the branch you want to push to if it's not 'main'
+git push origin main --set-upstream "https://github.com/$GH_USERNAME/$GH_REPOSITORY.git" <<EOF
+$GH_TOKEN
+EOF
 
 # Shut down the computer
 # sudo shutdown -h now
