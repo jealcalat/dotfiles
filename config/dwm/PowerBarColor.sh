@@ -130,57 +130,40 @@ memory() {
   printf "%s%s" "$(echo -e ^c$color16^ $powerline_h)^d^" "$(echo -e ^c$color17^^b$color16^ " " $MEMTOT,$MEMUSED, $ram'% ')"
 }
 
-battery0() {
-  BAT=$(upower -i $(upower -e | grep 'BAT') | grep 'percentage' | cut -d':' -f2 | tr -d '%,[:blank:]')
-  AC=$(upower -i $(upower -e | grep 'BAT') | grep 'state' | cut -d':' -f2 | tr -d '[:blank:]')
+battery_status() {
+  local bat=$1
+  local ac=$(upower -i "$(upower -e | grep "$bat")" | grep 'state' | awk -F'[:] ' '{print $2}')
+  local percent=$(upower -i "$(upower -e | grep "$bat")" | grep 'percentage' | awk -F'[:] ' '{print $2}' | tr -d '%,[:blank:]')
 
-  if [[ "$AC" == "charging" ]]; then
-    printf "  $BAT%%"
-  elif [[ "$AC" == "fully-charged" ]]; then
+  if [[ -z $ac ]]; then
+    printf " " # No battery information available
+  elif [[ $ac == "charging" ]]; then
+    printf "  $percent%%"
+  elif [[ $ac == "fully-charged" ]]; then
     printf " "
   else
-    if [[ ("$BAT" -ge "0") && ("$BAT" -le "20") ]]; then
-      printf "  $BAT%%"
-    elif [[ ("$BAT" -ge "20") && ("$BAT" -le "40") ]]; then
-      printf "  $BAT%%"
-    elif [[ ("$BAT" -ge "40") && ("$BAT" -le "60") ]]; then
-      printf "  $BAT%%"
-    elif [[ ("$BAT" -ge "60") && ("$BAT" -le "80") ]]; then
-      printf "  $BAT%%"
-    elif [[ ("$BAT" -ge "80") && ("$BAT" -le "100") ]]; then
-      printf "  $BAT%%"
-    fi
-  fi
-}
-
-battery1() {
-  BAT=$(upower -i $(upower -e | grep 'BAT1') | grep 'percentage' | cut -d':' -f2 | tr -d '%,[:blank:]')
-  AC=$(upower -i $(upower -e | grep 'BAT1') | grep 'state' | cut -d':' -f2 | tr -d '[:blank:]')
-
-  if [[ "$AC" == "charging" ]]; then
-    printf "  $BAT%%"
-  elif [[ "$AC" == "fully-charged" ]]; then
-    printf " "
-  else
-    if [[ ("$BAT" -ge "0") && ("$BAT" -le "20") ]]; then
-      printf "  $BAT%%"
-    elif [[ ("$BAT" -ge "20") && ("$BAT" -le "40") ]]; then
-      printf "  $BAT%%"
-    elif [[ ("$BAT" -ge "40") && ("$BAT" -le "60") ]]; then
-      printf "  $BAT%%"
-    elif [[ ("$BAT" -ge "60") && ("$BAT" -le "80") ]]; then
-      printf "  $BAT%%"
-    elif [[ ("$BAT" -ge "80") && ("$BAT" -le "100") ]]; then
-      printf "  $BAT%%"
+    if [[ $percent -ge 0 && $percent -le 20 ]]; then
+      printf "^c$color13^  $percent%%^d^"
+    elif [[ $percent -ge 20 && $percent -le 40 ]]; then
+      printf "^c$color13^  $percent%%^d^"
+    elif [[ $percent -ge 40 && $percent -le 60 ]]; then
+      printf "^c$color11^  $percent%%^d^"
+    elif [[ $percent -ge 60 && $percent -le 80 ]]; then
+      printf "^c$color12^  $percent%%^d^"
+    elif [[ $percent -ge 80 && $percent -le 100 ]]; then
+      printf "^c$color6^  $percent%%^d^"
     fi
   fi
 }
 
 batteries_t480() {
-  if [ -d "upower -i $(upower -e | grep 'BAT')" ]; then
-    printf "%s%s" "^c$color2^$powerline_h BT0%s,BT1%s^d^" "^c$color8^^b$color2^$(battery0)" "$(battery1)"
+  local battery0_status=$(battery_status 'BAT0')
+  local battery1_status=$(battery_status 'BAT1')
+
+  if [[ -n $battery0_status && -n $battery1_status ]]; then
+    printf "%s%s" "^c$color17^$powerline_h^d^" "^c$color8^^b$color17^1:$battery0_status"
   else
-    printf "%s%s" "^c$color2^$powerline_h^d^" "^c$color8^^b$color2^  "
+    printf "%s%s" "^c$color17^$powerline_h^d^ ^c$color8^^b$color2^  "
   fi
 }
 
@@ -206,7 +189,7 @@ one CPU core" ;;
   stats=$(awk '/cpu[0-9]+/ {printf "%d %d %d\n", substr($1,4), ($2 + $3 + $4 + $5), $5 }' /proc/stat)
   [ ! -f $cache ] && echo "$stats" >"$cache"
   old=$(cat "$cache")
-  printf "🪨"
+  printf "🖥 "
   echo "$stats" | while read -r row; do
     id=${row%% *}
     rest=${row#* }
@@ -217,15 +200,15 @@ one CPU core" ;;
 		printf "%d\n", (1 - (idle - $3)  / (total - $2))*100 /12.5}' \
       id="$id" total="$total" idle="$idle")" in
 
-    "0") printf "▁" ;;
-    "1") printf "▂" ;;
-    "2") printf "▃" ;;
-    "3") printf "▄" ;;
-    "4") printf "▅" ;;
-    "5") printf "▆" ;;
-    "6") printf "▇" ;;
-    "7") printf "█" ;;
-    "8") printf "█" ;;
+    "0") printf "^c$color6^▁^d^" ;;
+    "1") printf "^c$color6^▂^d^" ;;
+    "2") printf "^c$color12^▃^d^" ;;
+    "3") printf "^c$color12^▄^d^" ;;
+    "4") printf "^c$color12^▅^d^" ;;
+    "5") printf "^c$color11^▆^d^" ;;
+    "6") printf "^c$color11^▇^d^" ;;
+    "7") printf "^c$color13^█^d^" ;;
+    "8") printf "^c$color13^█^d^" ;;
     esac
   done
   printf "\\n"
@@ -293,7 +276,63 @@ sys_tray_space() {
 
 #update every 30 seconds
 while true; do
-  xsetroot -name "$(dwm_spotify) $(batteries_t480) $(get_cputemp)|CPUs: $(cpu_usage) $(memory) $(get_disk) $(updates) $(dwm_alsa) $(datetime) $(sys_tray_space) "
+  xsetroot -name "$(dwm_spotify) $(batteries_t480) $(get_cputemp)|$(cpu_usage) $(memory) $(get_disk) $(updates) $(dwm_alsa) $(datetime) $(sys_tray_space) "
 
   sleep 1
 done
+
+# ============================= Unused code ==================================
+
+#battery0() {
+#BAT=$(upower -i $(upower -e | grep 'BAT') | grep 'percentage' | cut -d':' -f2 | tr -d '%,[:blank:]')
+#AC=$(upower -i $(upower -e | grep 'BAT') | grep 'state' | cut -d':' -f2 | tr -d '[:blank:]')
+
+#if [[ "$AC" == "charging" ]]; then
+#printf "  $BAT%%"
+#elif [[ "$AC" == "fully-charged" ]]; then
+#printf " "
+#else
+#if [[ ("$BAT" -ge "0") && ("$BAT" -le "20") ]]; then
+#printf "  $BAT%%"
+#elif [[ ("$BAT" -ge "20") && ("$BAT" -le "40") ]]; then
+#printf "  $BAT%%"
+#elif [[ ("$BAT" -ge "40") && ("$BAT" -le "60") ]]; then
+#printf "  $BAT%%"
+#elif [[ ("$BAT" -ge "60") && ("$BAT" -le "80") ]]; then
+#printf "  $BAT%%"
+#elif [[ ("$BAT" -ge "80") && ("$BAT" -le "100") ]]; then
+#printf "  $BAT%%"
+#fi
+#fi
+#}
+
+#battery1() {
+#BAT=$(upower -i $(upower -e | grep 'BAT1') | grep 'percentage' | cut -d':' -f2 | tr -d '%,[:blank:]')
+#AC=$(upower -i $(upower -e | grep 'BAT1') | grep 'state' | cut -d':' -f2 | tr -d '[:blank:]')
+
+#if [[ "$AC" == "charging" ]]; then
+#printf "  $BAT%%"
+#elif [[ "$AC" == "fully-charged" ]]; then
+#printf " "
+#else
+#if [[ ("$BAT" -ge "0") && ("$BAT" -le "20") ]]; then
+#printf "  $BAT%%"
+#elif [[ ("$BAT" -ge "20") && ("$BAT" -le "40") ]]; then
+#printf "  $BAT%%"
+#elif [[ ("$BAT" -ge "40") && ("$BAT" -le "60") ]]; then
+#printf "  $BAT%%"
+#elif [[ ("$BAT" -ge "60") && ("$BAT" -le "80") ]]; then
+#printf "  $BAT%%"
+#elif [[ ("$BAT" -ge "80") && ("$BAT" -le "100") ]]; then
+#printf "  $BAT%%"
+#fi
+#fi
+#}
+
+#batteries_t480() {
+#if [ -d "upower -i $(upower -e | grep 'BAT')" ]; then
+#printf "%s%s" "^c$color2^$powerline_h BT0%s,BT1%s^d^" "^c$color8^^b$color2^$(battery0)" "$(battery1)"
+#else
+#printf "%s%s" "^c$color2^$powerline_h^d^" "^c$color8^^b$color2^  "
+#fi
+#}
