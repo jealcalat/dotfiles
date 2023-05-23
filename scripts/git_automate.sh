@@ -69,6 +69,7 @@ git commit -m "$COMMIT_MSG"
 # Replace 'origin' with the name of the remote repository if it's not 'origin'
 # Replace 'main' with the name of the branch you want to push to if it's not 'main'
 git push "https://$GH_TOKEN@github.com/$GH_USERNAME/$GH_REPOSITORY.git" main
+git push origin
 
 # Shut down the computer
 
