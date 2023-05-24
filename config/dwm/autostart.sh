@@ -49,6 +49,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 ## Add your autostart programs here --------------
 sxhkd &
 udiskie &
+polybar mybar &
 (sleep 20s && dropbox) &
 (sleep 20s && megasync) &
 (sleep 2s && setxkbmap -layout es) &

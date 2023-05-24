@@ -68,7 +68,7 @@ datetime() {
 
 sound() {
   vol="$(amixer get Master | sed -n 's/^.*\[\([0-9]\+\)%.*$/\1/p' | uniq)"
-  printf "%s%s" "$(echo -e ^c$color7^ $powerline_h)^d^" "$(echo -e ^c$color3^^b$color7^ "" $vol'% ')"
+  printf "%s%s" "$(echo -e ^c$color7^ $powerline_h)^d^" "$(echo -e ^c$color3^^b$color7^ "" $vol'%')"
 }
 
 dwm_alsa() {
@@ -80,11 +80,11 @@ dwm_alsa() {
     else
       #removed this line becuase it may get confusing
       if [ "$VOL" -gt 0 ] && [ "$VOL" -le 33 ]; then
-        printf "%s%s" "$(echo -e ^c$color7^ $powerline_h)^d^" "$(echo -e ^c$color3^^b$color7^ "🔈" $VOL'% ')"
+        printf "%s%s" "$(echo -e ^c$color7^ $powerline_h)^d^" "$(echo -e ^c$color3^^b$color7^ "🔈" $VOL'%')"
       elif [ "$VOL" -gt 33 ] && [ "$VOL" -le 66 ]; then
-        printf "%s%s" "$(echo -e ^c$color7^ $powerline_h)^d^" "$(echo -e ^c$color3^^b$color7^ "🔉" $VOL'% ')"
+        printf "%s%s" "$(echo -e ^c$color7^ $powerline_h)^d^" "$(echo -e ^c$color3^^b$color7^ "🔉" $VOL'%')"
       else
-        printf "%s%s" "$(echo -e ^c$color7^ $powerline_h)^d^" "$(echo -e ^c$color3^^b$color7^ "" $VOL'% ')"
+        printf "%s%s" "$(echo -e ^c$color7^ $powerline_h)^d^" "$(echo -e ^c$color3^^b$color7^ "" $VOL'%')"
       fi
     fi
   else
@@ -127,7 +127,7 @@ memory() {
   MEMUSED=$(echo $free_output | awk '{print $3}')
   MEMTOT=$(echo $free_output | awk '{print $2}')
   ram="$(free -t | awk 'FNR == 2 {printf "%.0f", $3/$2*100}')"
-  printf "%s%s" "$(echo -e ^c$color16^ $powerline_h)^d^" "$(echo -e ^c$color17^^b$color16^ " " $MEMTOT,$MEMUSED, $ram'% ')"
+  printf "%s%s" "$(echo -e ^c$color16^$powerline_h)^d^" "$(echo -e ^c$color17^^b$color16^ " " $MEMTOT,$MEMUSED,$ram'%')"
 }
 
 battery_status() {
@@ -161,9 +161,9 @@ batteries_t480() {
   local battery1_status=$(battery_status 'BAT1')
 
   if [[ -n $battery0_status && -n $battery1_status ]]; then
-    printf "%s%s" "^c$color17^$powerline_h^d^" "^c$color8^^b$color17^1:$battery0_status"
-  else
-    printf "%s%s" "^c$color17^$powerline_h^d^ ^c$color8^^b$color2^  "
+    printf "%s%s" "^c$color17^$powerline_h^d^" "^c$color11^^b$color17^$battery0_status"
+  # else
+  #   printf "%s%s" "^c$color17^$powerline_h^d^ ^c$color8^^b$color2^  "
   fi
 }
 
@@ -177,14 +177,6 @@ batteries_t480() {
 
 cpu_usage() {
   cache=/tmp/cpubarscache
-
-  case $BLOCK_BUTTON in
-  2) setsid -f "$TERMINAL" -e htop ;;
-  3) notify-send "🪨 CPU load module" "Each bar represents
-one CPU core" ;;
-  6) "$TERMINAL" -e "$EDITOR" "$0" ;;
-  esac
-
   # id total idle
   stats=$(awk '/cpu[0-9]+/ {printf "%d %d %d\n", substr($1,4), ($2 + $3 + $4 + $5), $5 }' /proc/stat)
   [ ! -f $cache ] && echo "$stats" >"$cache"
@@ -211,7 +203,7 @@ one CPU core" ;;
     "8") printf "^c$color13^█^d^" ;;
     esac
   done
-  printf "\\n"
+  # printf "\\n"
   echo "$stats" >"$cache"
 }
 
@@ -233,9 +225,9 @@ get_cputemp() {
   fi
 
   if [ "$CPU_TEMP" -ge $WARNING_LEVEL ]; then
-    PREFIX="^c$color4^$powerline_h^d^ ^c$color1^^b$color4^$FIRE$PREFIX"
-  else
-    PREFIX="^c$color1^$powerline_h^d^ ^c$color11^^b$color1^$PREFIX"
+    PREFIX="^b$color4^$FIRE$PREFIX"
+  # else
+  #   PREFIX="^c$color1^$powerline_h^d^ ^c$color11^^b$color1^$PREFIX"
   fi
 
   printf "$PREFIX$CPU_TEMP°C"
@@ -266,17 +258,19 @@ dwm_spotify() {
       [ "$SHUFFLE" = "On" ] && SHUFFLE=" SHF ON" || SHUFFLE=""
     fi
 
-    printf "♫ %s%s %s-%s %02d:%02d/%02d:%02d%s\n" "^c$color11^$powerline_h^d^" "^c$color1^^b$color11^$STATUS" "${ARTIST:0:14}" "${TRACK:0:9}..." $((POSITION % 3600 / 60)) $((POSITION % 60)) $((DURATION % 3600 / 60)) $((DURATION % 60)) "$SHUFFLE"
+    printf "%s%s %s-%s %02d:%02d/%02d:%02d%s\n" "^c$color11^$powerline_h^d^" "^c$color1^^b$color11^$STATUS" "${ARTIST:0:14}" "${TRACK:0:9}..." $((POSITION % 3600 / 60)) $((POSITION % 60)) $((DURATION % 3600 / 60)) $((DURATION % 60)) "$SHUFFLE"
+  else
+    printf "^c$color11^$powerline_h^d^^c$color1^^b$color11^Off"
   fi
 }
 
 sys_tray_space() {
-  printf "       "
+  printf "        "
 }
 
 #update every 30 seconds
 while true; do
-  xsetroot -name "$(dwm_spotify) $(batteries_t480) $(get_cputemp)|$(cpu_usage) $(memory) $(get_disk) $(updates) $(dwm_alsa) $(datetime) $(sys_tray_space) "
+  xsetroot -name "$(dwm_spotify)$(batteries_t480) | $(get_cputemp) | $(cpu_usage)$(memory)$(get_disk)$(updates)$(dwm_alsa)$(datetime)$(sys_tray_space)"
 
   sleep 1
 done
