@@ -258,7 +258,7 @@ dwm_spotify() {
       [ "$SHUFFLE" = "On" ] && SHUFFLE=" SHF ON" || SHUFFLE=""
     fi
 
-    printf "%s%s %s-%s %02d:%02d/%02d:%02d%s\n" "^c$color11^$powerline_h^d^" "^c$color1^^b$color11^$STATUS" "${ARTIST:0:14}" "${TRACK:0:9}..." $((POSITION % 3600 / 60)) $((POSITION % 60)) $((DURATION % 3600 / 60)) $((DURATION % 60)) "$SHUFFLE"
+    printf "%s%s %s-%s %02d:%02d/%02d:%02d%s\n" "^c$color11^$powerline_h^d^" "^c$color1^^b$color11^$STATUS" "${ARTIST:0:10}" "${TRACK:0:9}>" $((POSITION % 3600 / 60)) $((POSITION % 60)) $((DURATION % 3600 / 60)) $((DURATION % 60)) "$SHUFFLE"
   else
     printf "^c$color11^$powerline_h^d^^c$color1^^b$color11^Off"
   fi
@@ -268,11 +268,28 @@ sys_tray_space() {
   printf "        "
 }
 
-#update every 30 seconds
-while true; do
-  xsetroot -name "$(dwm_spotify)$(batteries_t480) | $(get_cputemp) | $(cpu_usage)$(memory)$(get_disk)$(updates)$(dwm_alsa)$(datetime)$(sys_tray_space)"
+max_length=40
 
-  sleep 1
+while true; do
+  ## Get current Spotify status
+  #spotify_status=$(dwm_spotify)
+
+  ## Calculate the number of spaces to append
+  #current_length=${#spotify_status}
+  #spaces_to_append=$((max_length - current_length))
+
+  ## If spaces_to_append is negative, just set it to 0
+  #if (( spaces_to_append < 0 )); then
+      #max_length=$((current_length + 10))  # Add 20 or any other number you think is appropriate
+      #spaces_to_append=$((max_length - current_length))
+  #fi
+
+  ## Append space characters to the status
+  #spotify_status_padded="$spotify_status$(printf '%*s' $spaces_to_append)"
+
+  # xsetroot -name "$spotify_status_padded$(batteries_t480) | $(get_cputemp) | $(cpu_usage)$(memory)$(get_disk)$(updates)$(dwm_alsa)$(datetime)$(sys_tray_space)"
+  xsetroot -name "$(batteries_t480) | $(get_cputemp) | $(cpu_usage)$(memory)$(get_disk)$(updates)$(dwm_alsa)$(datetime)$(sys_tray_space)"
+  sleep 2
 done
 
 # ============================= Unused code ==================================

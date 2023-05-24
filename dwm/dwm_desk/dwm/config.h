@@ -192,7 +192,7 @@ static Key keys[] = {
     // Misc -----------
     {MODKEY,             XK_p,                     spawn,        {.v = cpickcmd}},
     {ALTKEY|ControlMask, XK_l,                     spawn,        {.v = lockcmd}},
-    {MODKEY,             XK_m,                     spawn,        {.v = menucmd }},
+    {ALTKEY,             XK_m,                     spawn,        {.v = menucmd }},
         // DWM Session	-----------
     {MODKEY|ControlMask, XK_q,                    quit,          {0}},  // Quit DWM
     {MODKEY|ShiftMask,   XK_r,                    quit,          {1}},  // Restart DWM

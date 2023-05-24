@@ -1,0 +1,41 @@
+[global]
+margin-bottom = 0
+
+; Adjust the _NET_WM_STRUT_PARTIAL bottom value
+; Used for bottom aligned bars
+margin-top = 0
+
+[colors]
+background = #D69821
+foreground = #282828
+
+[bar/mybar]
+font-0 = "JetBrains Mono:size=9.5;3"
+font-1 = "Iosevka Nerd Font:size=9;3"
+font-2 = "Iosevka Nerd Font:size=6;3"
+font-3 = "FontAwesome:size=9"
+monitor = ${env:MONITOR:HDMI-0}
+
+; Use the specified monitor as a fallback if the main one is not found.
+monitor-fallback =
+
+; Require the monitor to be in connected state
+; XRandR sometimes reports my monitor as being disconnected (when in use)
+monitor-strict = false
+bottom = true
+width = 20%
+height = 18
+offset-x = 0.1%
+offset-y = 0
+background = ${colors.background}
+foreground = ${colors.foreground}
+modules-left = spotify
+; Tell the Window Manager not to configure the window.
+; Use this to detach the bar if your WM is locking its size/position.
+override-redirect = false
+
+[module/spotify]
+pin-workspace = false
+type = custom/script
+exec = /home/mrrobot/.config/polybar/dwm_spotify.sh
+interval = 2
