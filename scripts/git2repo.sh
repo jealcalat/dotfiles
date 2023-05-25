@@ -11,7 +11,7 @@ COMMIT_MSG=""
 
 # Function to read the GitHub token from a file
 read_gh_token() {
-  GH_TOKEN=$(cat /home/mrrobot/Documents/GitHub/dotfiles/scripts/token.txt)
+  GH_TOKEN=$(cat /home/mrrobot/Dropbox/utils_bash_scripts/token.txt)
 }
 
 # Parse command line arguments
