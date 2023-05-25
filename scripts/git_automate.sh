@@ -7,6 +7,15 @@
 # 3. Your GitHub token
 # 4. The time in seconds to sleep before pushing to GitHub
 # Also, you need to set your GitHub username and repository name in the script.
+# ==============================================================================
+# troubleshooting:
+# not that if there are a lot of changes, the script will take a long time to run
+# or get stuck at "pack-reused 0". 
+# You can write: 
+# git config --global http.postBuffer 157286400
+# here's the issue: 
+# https://github.com/desktop/desktop/issues/15636#issuecomment-1523224686
+# ==============================================================================
 
 # Usage:
 # ./git_automate.sh <path-to-repository> <commit-message> <github-token> <sleep-time>
@@ -31,6 +40,9 @@ SLEEP_TIME=$4
 # Set your GitHub token
 GH_TOKEN=$3
 
+# Set whether to shut down the computer after pushing to GitHub;
+# make it false for default
+SHUT=FALSE
 SHUT=$5
 
 # Wait for $SLEEP_TIME seconds
