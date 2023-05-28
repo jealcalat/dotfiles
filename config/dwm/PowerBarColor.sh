@@ -1,7 +1,20 @@
-# PowerStatus-dwm
-# Author - HashTag-4512
-# Date - 19/5/21
-# A modular powerline statusbar for dwm
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+#  
+# PoerBarColor
+# Based on a status bar by HashTag-4512
 
 #powerline symbols
 powerline_h="" #"\ue0b2"
@@ -119,15 +132,15 @@ get_disk() {
   STOUSED=$(echo $df_output | awk '{print $3}')
   STOTOT=$(echo $df_output | awk '{print $2}')
   STOPER=$(echo $df_output | awk '{print $5}')
-  printf "^c$color14^$powerline_h^d^%s %s/%s (%s)" "^c$color15^^b$color14^$PREFIX_FILESYSTEM" "$STOUSED" "$STOTOT" "$STOPER"
+  printf "^c$color14^$powerline_h^d^%s %s,%s" "^c$color15^^b$color14^$PREFIX_FILESYSTEM" "$STOUSED" "$STOTOT" #"$STOPER"
 }
 
 memory() {
   free_output=$(free -h | grep Mem)
   MEMUSED=$(echo $free_output | awk '{print $3}')
   MEMTOT=$(echo $free_output | awk '{print $2}')
-  ram="$(free -t | awk 'FNR == 2 {printf "%.0f", $3/$2*100}')"
-  printf "%s%s" "$(echo -e ^c$color16^$powerline_h)^d^" "$(echo -e ^c$color17^^b$color16^ " " $MEMTOT,$MEMUSED,$ram'%')"
+  #ram="$(free -t | awk 'FNR == 2 {printf "%.0f", $3/$2*100}')"
+  printf "%s%s" "$(echo -e ^c$color16^$powerline_h)^d^" "$(echo -e ^c$color17^^b$color16^ " " $MEMTOT,$MEMUSED )"
 }
 
 battery_status() {
@@ -258,37 +271,40 @@ dwm_spotify() {
       [ "$SHUFFLE" = "On" ] && SHUFFLE=" SHF ON" || SHUFFLE=""
     fi
 
-    printf "%s%s %s-%s %02d:%02d/%02d:%02d%s\n" "^c$color11^$powerline_h^d^" "^c$color1^^b$color11^$STATUS" "${ARTIST:0:10}" "${TRACK:0:9}>" $((POSITION % 3600 / 60)) $((POSITION % 60)) $((DURATION % 3600 / 60)) $((DURATION % 60)) "$SHUFFLE"
+    #printf "%s%s %s-%s %02d:%02d/%02d:%02d%s\n" "^c$color11^$powerline_h^d^" "^c$color1^^b$color11^$STATUS" "${ARTIST:0:10}" "${TRACK:0:9}>" $((POSITION % 3600 / 60)) $((POSITION % 60)) $((DURATION % 3600 / 60)) $((DURATION % 60)) "$SHUFFLE"
+    printf "%s%s-%s %02d:%02d/%02d:%02d%s\n" "^c$color11^$powerline_h^d^" "^c$color1^^b$color11^${ARTIST:0:10}" "${TRACK:0:10}>" $((POSITION % 3600 / 60)) $((POSITION % 60)) $((DURATION % 3600 / 60)) $((DURATION % 60))
   else
     printf "^c$color11^$powerline_h^d^^c$color1^^b$color11^Off"
   fi
 }
 
+printf "${ARTIST:0:10}-${TRACK:0:10}>$((POSITION % 3600 / 60)) $((POSITION % 60)) $((DURATION % 3600 / 60)) $((DURATION % 60))"
+
 sys_tray_space() {
   printf "        "
 }
 
-max_length=40
+max_length=22
 
 while true; do
   ## Get current Spotify status
-  #spotify_status=$(dwm_spotify)
+  spotify_status=$(dwm_spotify)
 
-  ## Calculate the number of spaces to append
-  #current_length=${#spotify_status}
-  #spaces_to_append=$((max_length - current_length))
+  # Calculate the number of spaces to append
+  current_length=${#spotify_status}
+  spaces_to_append=$((max_length - current_length))
 
-  ## If spaces_to_append is negative, just set it to 0
-  #if (( spaces_to_append < 0 )); then
-      #max_length=$((current_length + 10))  # Add 20 or any other number you think is appropriate
-      #spaces_to_append=$((max_length - current_length))
-  #fi
+  # If spaces_to_append is negative, just set it to 0
+  if (( spaces_to_append < 0 )); then
+      max_length=$((current_length + 10))  # Add 20 or any other number you think is appropriate
+      spaces_to_append=$((max_length - current_length))
+  fi
 
-  ## Append space characters to the status
-  #spotify_status_padded="$spotify_status$(printf '%*s' $spaces_to_append)"
+  # Append space characters to the status
+  spotify_status_padded="$spotify_status$(printf '%*s' $spaces_to_append)"
 
-  # xsetroot -name "$spotify_status_padded$(batteries_t480) | $(get_cputemp) | $(cpu_usage)$(memory)$(get_disk)$(updates)$(dwm_alsa)$(datetime)$(sys_tray_space)"
-  xsetroot -name "$(batteries_t480) | $(get_cputemp) | $(cpu_usage)$(memory)$(get_disk)$(updates)$(dwm_alsa)$(datetime)$(sys_tray_space)"
+  xsetroot -name "$spotify_status_padded$(batteries_t480) | $(get_cputemp) | $(cpu_usage)$(memory)$(get_disk)$(updates)$(dwm_alsa)$(datetime)$(sys_tray_space)"
+  # xsetroot -name "$(batteries_t480) | $(get_cputemp) | $(cpu_usage)$(memory)$(get_disk)$(updates)$(dwm_alsa)$(datetime)$(sys_tray_space)"
   sleep 2
 done
 
