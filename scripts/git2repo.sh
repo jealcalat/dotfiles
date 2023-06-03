@@ -4,6 +4,7 @@
 
 # Set default values for variables
 SHUT=false
+GIT_DIR=$1
 GH_REPOSITORY=""
 GH_TOKEN=""
 SLEEP_TIME=""
@@ -26,6 +27,8 @@ while [[ $# -gt 0 ]]; do
       if [ "$2" = "false" ]; then
         echo "Write your repository name: "
         read GH_REPOSITORY
+      else
+        GH_REPOSITORY=$(basename "$GIT_DIR")
       fi
       shift 2
       ;;
@@ -39,7 +42,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     *)
       # Assume the argument is the repository directory
-      REPO_DIR="$1"
+      GIT_DIR="$1"
       shift
       ;;
   esac
@@ -94,6 +97,7 @@ echo "Sleeping for $SLEEP_TIME seconds..."
 progress_bar ${SLEEP_TIME}
 
 # Navigate to your repository
+cd "$(dirname "$GIT_DIR")"
 cd "$REPO_DIR"
 
 # Stage all changes
