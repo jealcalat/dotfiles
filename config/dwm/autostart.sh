@@ -26,7 +26,7 @@ ksuperkey -e 'Super_L=Alt_L|F1' &
 ksuperkey -e 'Super_R=Alt_L|F1' &
 
 # Restore wallpaper
-hsetroot -cover /home/mrrobot/.config/dwm/wallpapers/keyboards.jpg
+hsetroot -cover /home/mrrobot/.config/dwm/wallpapers/gruvbox_pac.webp
 
 # Lauch dwmbar
 # /home/mrrobot/.config/dwm/dwmbar.sh &
@@ -47,9 +47,11 @@ wmname "LG3D"
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 ## Add your autostart programs here --------------
+# killall picom and start picom again with experimental backend
+killall -9 picom && picom --experimental-backend &
 sxhkd &
 udiskie &
-(sleep 10s && /home/mrrobot/.config/polybar/launch_polybar_spotify.sh) &
+# (sleep 10s && /home/mrrobot/.config/polybar/launch_polybar_spotify.sh) &
 (sleep 20s && dropbox) &
 (sleep 20s && megasync) &
 (sleep 2s && setxkbmap -layout es) &

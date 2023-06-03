@@ -1,7 +1,7 @@
   /* See LICENSE file for copyright and license details. */
                                          /* appearance */
 static const unsigned int borderpx       = 2;  /* border pixel of windows */
-static const unsigned int gappx          = 10; /* gaps between windows */
+static const unsigned int gappx          = 7; /* gaps between windows */
 static const unsigned int snap           = 32; /* snap pixel */
 static const unsigned int systraypinning = 0;  /* 0 : sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft  = 0;  /* 0: systray in the right corner, >0: systray on left of status text */
@@ -15,6 +15,8 @@ static const int topbar                  = 1;  /* 0 means bottom bar */
 static const char *fonts[]    = {"JetBrainsMono Nerd Font: size = 11"};
 static const char dmenufont[] = "monospace               : size = 10";
 
+// for use with the rounded corners patch (0 disables)
+// static const int CORNER_RADIUS = 0;
 /* ******************** Colors ******************** */
 static const char col_gray1[] = "#222222";
 static const char col_gray2[] = "#444444";
@@ -142,7 +144,7 @@ static const char *cpickcmd[]       = {"/home/mrrobot/.local/bin/color-gpick",  
 static const char *lockcmd[]        = {"/home/mrrobot/.local/bin/betterlockscreen",   "--lock",  NULL};
 static const char *layoutswitcher[] = {"/home/mrrobot/.config/dwm/bin/layoutmenu.sh", NULL};
 /* simulate right click */
-static const char *menucmd[]        = {"xdotool", "click", "3", NULL };
+// static const char *menucmd[]        = {"xdotool", "click", "3", NULL };
   /* Hardware keys for volume and brightness */
 #include <X11/XF86keysym.h>
 static const char *mutevol[] = {"/home/mrrobot/.local/bin/volume",     "--toggle",NULL};
@@ -192,7 +194,7 @@ static Key keys[] = {
     // Misc -----------
     {MODKEY,             XK_p,                     spawn,        {.v = cpickcmd}},
     {ALTKEY|ControlMask, XK_l,                     spawn,        {.v = lockcmd}},
-    {ALTKEY,             XK_m,                     spawn,        {.v = menucmd }},
+    // {MODKEY,             XK_Up,                    spawn,        {.v = menucmd}},
         // DWM Session	-----------
     {MODKEY|ControlMask, XK_q,                    quit,          {0}},  // Quit DWM
     {MODKEY|ShiftMask,   XK_r,                    quit,          {1}},  // Restart DWM

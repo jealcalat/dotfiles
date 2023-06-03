@@ -39,6 +39,7 @@
 #ifdef XINERAMA
 #include <X11/extensions/Xinerama.h>
 #endif /* XINERAMA */
+#include <X11/extensions/shape.h>
 #include <X11/Xft/Xft.h>
 
 #include "drw.h"
@@ -326,6 +327,7 @@ static Client *wintosystrayicon(Window w);
 static int xerror(Display *dpy, XErrorEvent *ee);
 static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
+// static void drawroundedcorners(Client *c);
 static void zoom(const Arg *arg);
 
 /* variables */
@@ -1496,6 +1498,9 @@ void manage(Window w, XWindowAttributes *wa)
 		unfocus(selmon->sel, 0);
 	c->mon->sel = c;
 	arrange(c->mon);
+
+    // drawroundedcorners(c);
+
 	XMapWindow(dpy, c->win);
 	focus(NULL);
 }
@@ -1756,6 +1761,55 @@ void resizeclient(Client *c, int x, int y, int w, int h)
 	XSync(dpy, False);
 }
 
+// void drawroundedcorners(Client *c) {
+//     // if set to zero in config.h, do not attempt to round
+//     if(CORNER_RADIUS < 0) return;
+
+//     // NOTE: this is extremely hacky and surely could be optimized.
+//     //       Any X wizards out there reading this, please pull request.
+//     if (CORNER_RADIUS > 0) { //   && c && !c->isfullscreen // put inside if statement to disable rounding when fullscreen
+//         Window win;
+//         win = c->win;
+//         if(!win) return;
+
+//         XWindowAttributes win_attr;
+//         if(!XGetWindowAttributes(dpy, win, &win_attr)) return;
+
+//         // set in config.h:
+//         int dia = 2 * CORNER_RADIUS;
+//         int w = c->w;
+//         int h = c->h;
+//         if(w < dia || h < dia) return;
+
+//         Pixmap mask;
+//         mask = XCreatePixmap(dpy, win, w, h, 1);
+//         if(!mask) return;
+
+//         XGCValues xgcv;
+//         GC shape_gc;
+//         shape_gc = XCreateGC(dpy, mask, 0, &xgcv);
+
+//         if(!shape_gc) {
+//             XFreePixmap(dpy, mask);
+//             free(shape_gc);
+//             return;
+//         }
+
+//         XSetForeground(dpy, shape_gc, 0);
+//         XFillRectangle(dpy, mask, shape_gc, 0, 0, w, h);
+//         XSetForeground(dpy, shape_gc, 1);
+//         XFillArc(dpy, mask, shape_gc, 0, 0, dia, dia, 0, 23040);
+//         XFillArc(dpy, mask, shape_gc, w-dia-1, 0, dia, dia, 0, 23040);
+//         XFillArc(dpy, mask, shape_gc, 0, h-dia-1, dia, dia, 0, 23040);
+//         XFillArc(dpy, mask, shape_gc, w-dia-1, h-dia-1, dia, dia, 0, 23040);
+//         XFillRectangle(dpy, mask, shape_gc, CORNER_RADIUS, 0, w-dia, h);
+//         XFillRectangle(dpy, mask, shape_gc, 0, CORNER_RADIUS, w, h-dia);
+//         XShapeCombineMask(dpy, win, ShapeBounding, 0, 0, mask, ShapeSet);
+//         XFreePixmap(dpy, mask);
+//         XFreeGC(dpy, shape_gc);
+//     }
+// }
+
 void resizemouse(const Arg *arg)
 {
 	int ocx, ocy, nw, nh;
@@ -1799,6 +1853,7 @@ void resizemouse(const Arg *arg)
 			}
 			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating)
 				resize(c, c->x, c->y, nw, nh, 1);
+						// drawroundedcorners(c);
 			break;
 		}
 	} while (ev.type != ButtonRelease);
@@ -1812,6 +1867,7 @@ void resizemouse(const Arg *arg)
 		selmon = m;
 		focus(NULL);
 	}
+    // drawroundedcorners(c);
 }
 
 void resizerequest(XEvent *e)
@@ -2189,7 +2245,8 @@ void tagmon(const Arg *arg)
 
 void tile(Monitor *m)
 {
-	unsigned int i, n, h, mw, my, ty;
+	// unsigned int i, n, h, mw, my, ty;
+	unsigned int i, n, h, r, g = 0, mw, my, ty;
 	Client *c;
 
 	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++)
@@ -2198,23 +2255,32 @@ void tile(Monitor *m)
 		return;
 
 	if (n > m->nmaster)
-		mw = m->nmaster ? m->ww * m->mfact : 0;
+		// mw = m->nmaster ? m->ww * m->mfact : 0;
+		mw = m->nmaster ? (m->ww - (g = gappx)) * m->mfact : 0;
 	else
 		mw = m->ww - m->gappx;
 	for (i = 0, my = ty = m->gappx, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
 		if (i < m->nmaster)
 		{
-			h = (m->wh - my) / (MIN(n, m->nmaster) - i) - m->gappx;
+			// h = (m->wh - my) / (MIN(n, m->nmaster) - i) - m->gappx;
+			r = MIN(n, m->nmaster) - i;
+			h = (m->wh - my - gappx * (r - 1)) / r;
 			resize(c, m->wx + m->gappx, m->wy + my, mw - (2 * c->bw) - m->gappx, h - (2 * c->bw), 0);
 			if (my + HEIGHT(c) < m->wh)
-				my += HEIGHT(c) + m->gappx;
+				// my += HEIGHT(c) + m->gappx;
+				my += HEIGHT(c) + gappx;
 		}
 		else
 		{
-			h = (m->wh - ty) / (n - i);
-			resize(c, m->wx + mw, m->wy + ty, m->ww - mw - (2 * c->bw), h - (2 * c->bw), 0);
+			// h = (m->wh - ty) / (n - i);
+			// resize(c, m->wx + mw, m->wy + ty, m->ww - mw - (2 * c->bw), h - (2 * c->bw), 0);
+			// if (ty + HEIGHT(c) < m->wh)
+			// 	ty += HEIGHT(c) + m->gappx;
+			r = n - i;
+			h = (m->wh - ty - gappx * (r - 1)) / r;
+			resize(c, m->wx + mw + g, m->wy + ty, m->ww - mw - g - (2*c->bw), h - (2*c->bw), False);
 			if (ty + HEIGHT(c) < m->wh)
-				ty += HEIGHT(c) + m->gappx;
+				ty += HEIGHT(c) + gappx;
 		}
 }
 

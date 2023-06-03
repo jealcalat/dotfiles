@@ -13,8 +13,10 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #  
-# PoerBarColor
-# Based on a status bar by HashTag-4512
+# PowerStatus-dwm
+# Author - HashTag-4512
+# Date - 19/5/21
+# A modular powerline statusbar for dwm
 
 #powerline symbols
 powerline_h="" #"\ue0b2"
@@ -272,13 +274,13 @@ dwm_spotify() {
     fi
 
     #printf "%s%s %s-%s %02d:%02d/%02d:%02d%s\n" "^c$color11^$powerline_h^d^" "^c$color1^^b$color11^$STATUS" "${ARTIST:0:10}" "${TRACK:0:9}>" $((POSITION % 3600 / 60)) $((POSITION % 60)) $((DURATION % 3600 / 60)) $((DURATION % 60)) "$SHUFFLE"
-    printf "%s%s-%s %02d:%02d/%02d:%02d%s\n" "^c$color11^$powerline_h^d^" "^c$color1^^b$color11^${ARTIST:0:10}" "${TRACK:0:10}>" $((POSITION % 3600 / 60)) $((POSITION % 60)) $((DURATION % 3600 / 60)) $((DURATION % 60))
+    # printf "%s%s-%s %02d:%02d/%02d:%02d%s\n" "^c$color11^$powerline_h^d^" "^c$color1^^b$color11^${ARTIST:0:10}" "${TRACK:0:10}>" $((POSITION % 3600 / 60)) $((POSITION % 60)) $((DURATION % 3600 / 60)) $((DURATION % 60))
+    printf "%s%s %s-%s" "^c$color11^$powerline_h^d^" "^c$color1^^b$color11^$STATUS" "${ARTIST:0:10}" "${TRACK:0:9}"
   else
     printf "^c$color11^$powerline_h^d^^c$color1^^b$color11^Off"
   fi
 }
 
-printf "${ARTIST:0:10}-${TRACK:0:10}>$((POSITION % 3600 / 60)) $((POSITION % 60)) $((DURATION % 3600 / 60)) $((DURATION % 60))"
 
 sys_tray_space() {
   printf "        "
@@ -305,7 +307,7 @@ while true; do
 
   xsetroot -name "$spotify_status_padded$(batteries_t480) | $(get_cputemp) | $(cpu_usage)$(memory)$(get_disk)$(updates)$(dwm_alsa)$(datetime)$(sys_tray_space)"
   # xsetroot -name "$(batteries_t480) | $(get_cputemp) | $(cpu_usage)$(memory)$(get_disk)$(updates)$(dwm_alsa)$(datetime)$(sys_tray_space)"
-  sleep 2
+  sleep 1
 done
 
 # ============================= Unused code ==================================

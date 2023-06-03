@@ -1,3 +1,0 @@
-# Music control
-XF86Audio{Next,Prev,Play,Stop}
-	playerctl {next,previous,play-pause,stop}
