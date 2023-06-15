@@ -11,6 +11,22 @@ dotfiles_dir="https://github.com/jealcalat/dotfiles/"
 
 # alternative 2: no password
 # Add NOPASSWD configuration for pacman and make
+echo -n "Enter your username:"
+read -s username
+echo
+echo "Adding NOPASSWD configuration for pacman and make..."#!/bin/bash
+
+dotfiles_dir="https://github.com/jealcalat/dotfiles/"
+
+## alternative 1: prompt the password
+# # Prompt for password
+# echo -n "Enter your password: "
+# read -s my_pass
+# echo
+## All steps for installing and so should start with echo "$my pass <the rest>"
+
+# alternative 2: no password
+# Add NOPASSWD configuration for pacman and make
 echo "--------------------------------------------"
 echo -n "Enter your username:"
 read -s username
@@ -31,6 +47,9 @@ cd dotfiles
 echo "--------------------------------------------"
 echo "Installing packages from the official repositories..."
 sudo pacman -S --noconfirm --needed - < official_packages
+# install yay from git
+
+pacman -S --needed git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
 
 echo "--------------------------------------------"
 echo "Changing default shell to zsh..."
@@ -44,7 +63,7 @@ yay -S --noconfirm --needed - < aur_packages
 # Make all files starting with #!/bin/bash executable
 echo "--------------------------------------------"
 echo "Replace mrrobot with its value"
-find . -type f -exec sed -i -e "s@\$USER@${username}@g"  {} +;
+find . -type f -exec sed -i -e "s@\mrrobot@${username}@g"  {} +;
 
 echo "Making scripts executable..."
 echo "--------------------------------------------"
@@ -71,11 +90,9 @@ Encoding=UTF-8
 Name=DWM
 Comment=Dynamic window manager
 Exec=/home/mrrobot/.config/dwm/autostart.sh
-Icon=/home/mrrobot/.config/dwm/dwm.png
+Icon=dwm
 Type=XSession
 EOF
-# change permisions to the icon
-chmod 644 /home/mrrobot/.config/dwm/dwm.png
 # Move the dwm.desktop file to the xsessions directory
 sudo mv dwm.desktop /usr/share/xsessions/
 
@@ -92,6 +109,9 @@ git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-m
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
 git clone https://github.com/jirutka/zsh-shift-select.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-shift-select
+
+# install starship
+curl -sS https://starship.rs/install.sh | sh
 starship preset pastel-powerline -o ~/.config/starship.toml
 
 # Install dwm
