@@ -11,22 +11,6 @@ dotfiles_dir="https://github.com/jealcalat/dotfiles/"
 
 # alternative 2: no password
 # Add NOPASSWD configuration for pacman and make
-echo -n "Enter your username:"
-read -s username
-echo
-echo "Adding NOPASSWD configuration for pacman and make..."#!/bin/bash
-
-dotfiles_dir="https://github.com/jealcalat/dotfiles/"
-
-## alternative 1: prompt the password
-# # Prompt for password
-# echo -n "Enter your password: "
-# read -s my_pass
-# echo
-## All steps for installing and so should start with echo "$my pass <the rest>"
-
-# alternative 2: no password
-# Add NOPASSWD configuration for pacman and make
 echo "--------------------------------------------"
 echo -n "Enter your username:"
 read -s username
@@ -87,9 +71,11 @@ Encoding=UTF-8
 Name=DWM
 Comment=Dynamic window manager
 Exec=/home/mrrobot/.config/dwm/autostart.sh
-Icon=dwm
+Icon=/home/mrrobot/.config/dwm/dwm.png
 Type=XSession
 EOF
+# change permisions to the icon
+chmod 644 /home/mrrobot/.config/dwm/dwm.png
 # Move the dwm.desktop file to the xsessions directory
 sudo mv dwm.desktop /usr/share/xsessions/
 

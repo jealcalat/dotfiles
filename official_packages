@@ -26,7 +26,7 @@ ranger
 rofi
 starship
 sxhkd
-texlive-most
+texlive
 thunar
 tk
 ueberzug
@@ -34,5 +34,4 @@ v4l-utils
 v4l-utils
 xorg-xbacklight
 xorg-xsetroot
-yay
 zsh
