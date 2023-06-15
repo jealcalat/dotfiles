@@ -11,6 +11,7 @@ fontconfig
 freetype2
 gcc-fortran
 geany
+gdm
 ibus
 inkscape
 libx11
@@ -30,8 +31,11 @@ texlive
 thunar
 tk
 ueberzug
+webkit2gtk
 v4l-utils
-v4l-utils
+xorg
+xorg-server
+xorg-xinit
 xorg-xbacklight
 xorg-xsetroot
 zsh
