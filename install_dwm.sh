@@ -33,7 +33,13 @@ echo "Installing packages from the official repositories..."
 sudo pacman -S --noconfirm --needed - < official_packages
 # install yay from git
 
-pacman -S --needed git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
+pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
+
+# install sddm
+pacman -S --needed sddm
+sudo systemctl enable sddm
+cp -r dotfiles/sddm/themes /usr/share/sddm/
+cp dotfiles/sddm.conf /etc/ 
 
 echo "--------------------------------------------"
 echo "Changing default shell to zsh..."
