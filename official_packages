@@ -1,5 +1,6 @@
 alacritty
 alsa-utils
+arandr
 baobab
 base-devel
 brightnessctl
@@ -44,6 +45,7 @@ thunar
 thunar-archive-plugin
 tk
 ttf-iosevka-nerd
+ttf-fantasque-sans-mono
 ueberzug
 webkit2gtk
 v4l-utils
