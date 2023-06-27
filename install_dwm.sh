@@ -35,7 +35,14 @@ sudo pacman -S --noconfirm --needed - < official_packages
 
 pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
 
+# Install packages from the AUR
+echo "--------------------------------------------"
+echo "Installing packages from the AUR..."
+yay -S --noconfirm --needed - < aur_packages
+
 # install sddm
+echo "--------------------------------------------"
+echo "Installing and enabling sddm..."
 pacman -S --needed sddm
 sudo systemctl enable sddm
 cp -r dotfiles/sddm/themes /usr/share/sddm/
@@ -45,16 +52,11 @@ echo "--------------------------------------------"
 echo "Changing default shell to zsh..."
 chsh -s $(which zsh)
 
-# Install packages from the AUR
-echo "--------------------------------------------"
-echo "Installing packages from the AUR..."
-yay -S --noconfirm --needed - < aur_packages
-
-# Make all files starting with #!/bin/bash executable
 echo "--------------------------------------------"
 echo "Replace mrrobot with its value"
 find . -type f -exec sed -i -e "s@\mrrobot@${username}@g"  {} +;
 
+# Make all files starting with #!/bin/bash executable
 echo "Making scripts executable..."
 echo "--------------------------------------------"
 find . -type f -exec grep -q -E '^#!/(bin/bash|usr/bin/env bash|bin/sh)' {} \; -exec chmod +x {} \;
