@@ -1,7 +1,9 @@
 alacritty
+alsa-utils
 baobab
 base-devel
 brightnessctl
+btop
 catfish
 dmenu
 dunst
@@ -14,6 +16,7 @@ galculator
 gcc-fortran
 geany
 gdm
+gthumb
 ibus
 inkscape
 libreoffice-fresh
@@ -22,12 +25,16 @@ libxft
 libxinerama
 meld
 mlocate
+neofetch
 pacman-contrib
 pandoc
 playerctl
 polybar
 python-pip
 pulseaudio
+qt5
+qt5-quickcontrols2
+qt5-svg
 r
 ranger
 rofi
@@ -36,10 +43,12 @@ texlive
 thunar
 thunar-archive-plugin
 tk
+ttf-iosevka-nerd
 ueberzug
 webkit2gtk
 v4l-utils
 xorg
+xorg-user-dirs
 xorg-server
 xorg-xinit
 xorg-xbacklight
