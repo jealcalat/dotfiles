@@ -22,6 +22,7 @@ libxft
 libxinerama
 meld
 mlocate
+pacman-contrib
 pandoc
 playerctl
 polybar
