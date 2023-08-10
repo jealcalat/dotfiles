@@ -33,22 +33,30 @@ echo "Installing packages from the official repositories..."
 sudo pacman -S --noconfirm --needed - < official_packages
 # install yay from git
 
-pacman -S --needed git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
-
-echo "--------------------------------------------"
-echo "Changing default shell to zsh..."
-chsh -s $(which zsh)
+pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
 
 # Install packages from the AUR
 echo "--------------------------------------------"
 echo "Installing packages from the AUR..."
 yay -S --noconfirm --needed - < aur_packages
 
-# Make all files starting with #!/bin/bash executable
+# install sddm
+echo "--------------------------------------------"
+echo "Installing and enabling sddm..."
+pacman -S --needed sddm
+sudo systemctl enable sddm
+cp -r dotfiles/sddm/themes /usr/share/sddm/
+cp dotfiles/sddm.conf /etc/ 
+
+echo "--------------------------------------------"
+echo "Changing default shell to zsh..."
+chsh -s $(which zsh)
+
 echo "--------------------------------------------"
 echo "Replace mrrobot with its value"
 find . -type f -exec sed -i -e "s@\mrrobot@${username}@g"  {} +;
 
+# Make all files starting with #!/bin/bash executable
 echo "Making scripts executable..."
 echo "--------------------------------------------"
 find . -type f -exec grep -q -E '^#!/(bin/bash|usr/bin/env bash|bin/sh)' {} \; -exec chmod +x {} \;
