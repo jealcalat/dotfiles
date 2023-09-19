@@ -9,6 +9,8 @@ catfish
 dmenu
 dunst
 engrampa
+ffmpeg
+ffmpegthumbnailer
 firefox
 flameshot
 fontconfig
@@ -18,6 +20,7 @@ gcc-fortran
 geany
 gdm
 gthumb
+gnome-keyring
 ibus
 inkscape
 libreoffice-fresh
@@ -27,12 +30,18 @@ libxinerama
 meld
 mlocate
 neofetch
+noto-fonts
+noto-fonts-extra
+noto-fonts-emoji
+ntfs-3g
 pacman-contrib
 pandoc
 playerctl
 polybar
 python-pip
-pulseaudio
+#pulseaudio
+pipewire-pulse
+pulsemixer
 qt5
 qt5-quickcontrols2
 qt5-svg
@@ -44,10 +53,14 @@ texlive
 thunar
 thunar-archive-plugin
 tk
+ttf-dejavu
+ttf-font-awesome
 ttf-iosevka-nerd
 ttf-fantasque-sans-mono
 ueberzug
+unzip
 webkit2gtk
+wireplumber
 v4l-utils
 xorg
 xorg-user-dirs
@@ -56,3 +69,4 @@ xorg-xinit
 xorg-xbacklight
 xorg-xsetroot
 zsh
+zsh-fast-syntax-highlighting-git
