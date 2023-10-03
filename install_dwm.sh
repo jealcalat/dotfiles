@@ -44,7 +44,8 @@ yay -S --noconfirm --needed - < aur_packages
 echo "--------------------------------------------"
 echo "Installing and enabling sddm..."
 pacman -S --needed sddm
-sudo systemctl enable sddm
+# force to change to sddm
+sudo systemctl enable sddm -f
 cp -r dotfiles/sddm/themes /usr/share/sddm/
 # sddm-greeter dm-greeter --test-mode --theme /usr/share/sddm/themes/delicious
 cp dotfiles/sddm.conf /etc/ 

@@ -39,7 +39,6 @@ pandoc
 playerctl
 polybar
 python-pip
-#pulseaudio
 pipewire-pulse
 pulsemixer
 qt5
@@ -62,11 +61,11 @@ unzip
 webkit2gtk
 wireplumber
 v4l-utils
+xdg-user-dirs
 xorg
-xorg-user-dirs
 xorg-server
 xorg-xinit
 xorg-xbacklight
 xorg-xsetroot
 zsh
-zsh-fast-syntax-highlighting-git
+
