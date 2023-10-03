@@ -46,6 +46,7 @@ echo "Installing and enabling sddm..."
 pacman -S --needed sddm
 sudo systemctl enable sddm
 cp -r dotfiles/sddm/themes /usr/share/sddm/
+# sddm-greeter dm-greeter --test-mode --theme /usr/share/sddm/themes/delicious
 cp dotfiles/sddm.conf /etc/ 
 
 echo "--------------------------------------------"
