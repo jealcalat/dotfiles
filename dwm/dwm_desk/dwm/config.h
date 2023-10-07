@@ -60,10 +60,10 @@ static const char *tagsel[][2] = {
 };
 
   /* ******************** Window Rules ******************** */
-static const Rule rules[] = {
-    /*                       xprop(1):
-    *                        WM_CLASS(STRING) =           instance,   class
-    *                        WM_NAME(STRING)  =           title
+static const Rule rules[]                     = {
+    /*                       xprop(1)         : 
+    *                        WM_CLASS(STRING) = instance,   class
+    *                        WM_NAME(STRING)  = title
     */
     /* class      			       instance title tags mask iscentered isfloating   monitor */
     {"Gimp",                         NULL, NULL, 0,      0,   1},
@@ -82,6 +82,12 @@ static const Rule rules[] = {
     {"Nm-connection-editor",         NULL, NULL, 0,      1,   1},
     {"Xfce4-power-manager-settings", NULL, NULL, 0,      1,   1},
     {"Webcam Preview",               NULL, NULL, 0,      1,  -1},
+    {"Galculator",                   NULL, NULL, 0,      1,   1},
+    {"Calculator",                   NULL, NULL, 0,      1,   1},
+    {"gnome-calculator",        "gnome-calculator", "Calculator", 0, 1, -1 },
+    {"Zotero",   "Toplevel", "Zotero - Document Preferences",    0,  1,  -1 },
+    {"Zotero",        "Toplevel", "Quick Format Citation", 0, 1, -1 },
+    {"Zotero",        "Toplevel", "Progress", 0, 1, -1 },
 };
 
                                   /* layout(s) */
