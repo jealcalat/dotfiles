@@ -10,12 +10,12 @@ configuration {
     window-format: 					"[{w}] ··· {c} ···   {t}";
     click-to-exit: 					true;
     combi-hide-mode-prefix: 		false;
-    display-window: 				"";
-    display-windowcd: 				"";
-    display-run: 					"";
-    display-ssh: 					"";
-    display-drun: 					"";
-    display-combi: 					"";
+    display-window: 				"🗔";
+    display-windowcd: 				"⟶";
+    display-run: 					">_";
+    display-ssh: 					"🔑";
+    display-drun: 					"🔍";
+    display-combi: 					"⚙";
 }
 
 @import "colors.rasi"

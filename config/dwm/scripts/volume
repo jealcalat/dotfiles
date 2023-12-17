@@ -6,7 +6,7 @@
 ## Script To Manage Speaker Volume For Archcraft.
 
 # icons
-iDIR='/home/mrrobot/.config/dwm/icons/'
+iDIR="/home/$USER/.config/dwm/icons/"
 
 # Get Volume
 get_volume() {

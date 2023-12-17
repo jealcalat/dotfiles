@@ -4,7 +4,7 @@
 configuration {
     font:                           "JetBrains Mono Medium 10";
     show-icons:                     false;
-    display-drun: 					"";
+    display-drun: 					"▶";
     drun-display-format:            "{icon} {name}";
     disable-history:                false;
 	click-to-exit: 					true;
@@ -40,7 +40,7 @@ prompt {
 
 textbox-prompt-colon {
 	expand: 						false;
-	str: 							"直";
+	str: 							"🖧";
     border-radius:                  8px;
     background-color:               @on;
     text-color:                     @background;

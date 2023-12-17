@@ -15,11 +15,11 @@ notify_cmd_shot="dunstify -u low --replace=699 -i /home/mrrobot/.config/dwm/icon
 rofi_command="rofi -theme $DIR/rofi/themes/screenshot.rasi"
 
 # Buttons
-screen=""
-area=""
-window=""
-infive=""
-inten=""
+screen="🖵"
+area="🮰"
+window="🗔"
+infive="5"
+inten="10"
 
 # notify and view screenshot
 notify_view () {
@@ -40,7 +40,7 @@ copy_shot () {
 # countdown
 countdown () {
 	for sec in `seq $1 -1 1`; do
-		dunstify -t 1000 --replace=699 -i /usr/share/archcraft/icons/dunst/timer.png "Taking shot in : $sec"
+		dunstify -t 1000 --replace=699 -i /home/mrrobot/.config/dwm/icons/dunst/timer.png "Taking shot in : $sec"
 		sleep 1
 	done
 }

@@ -19,8 +19,11 @@ if [ -z "$GEOMETRY" ]; then
     exit 1
 fi
 
+# Determine the current DISPLAY
+CURRENT_DISPLAY=$DISPLAY
 # Start capturing
-ffmpeg -f x11grab -s ${PARAMS[2]}x${PARAMS[3]} -i :0.0+${PARAMS[0]},${PARAMS[1]} -f alsa -ac 2 -i pulse -acodec aac -strict experimental -y ${DATE}.mp4 &
+
+ffmpeg -f x11grab -s ${PARAMS[2]}x${PARAMS[3]} -i $CURRENT_DISPLAY+${PARAMS[0]},${PARAMS[1]} -f alsa -ac 2 -i pulse -acodec aac -strict experimental -y ${DATE}.mp4 &
 
 # Get ffmpeg process ID
 PID=$!

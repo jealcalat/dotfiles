@@ -16,8 +16,8 @@ done
 xsetroot -cursor_name left_ptr
 
 # Polkit agent
-/usr/lib/xfce-polkit/xfce-polkit &
-
+# /usr/lib/xfce-polkit/xfce-polkit &
+/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
 # Enable power management
 xfce4-power-manager &
 
@@ -51,6 +51,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 killall -9 picom && picom --experimental-backend &
 sxhkd &
 udiskie &
+
 # (sleep 10s && /home/mrrobot/.config/polybar/launch_polybar_spotify.sh) &
 (sleep 20s && dropbox) &
 (sleep 20s && megasync) &
