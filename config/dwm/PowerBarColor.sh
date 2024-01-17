@@ -113,9 +113,32 @@ dwm_alsa() {
     fi
 }
 
+# arch only
+#updates() {
+#    updates=$(checkupdates | wc -l)
+#    if [ -z "$updates" ]; then
+#        printf "^c$color12^$powerline_h^d^" "^c$color1^^b$color12^  Ok"
+#    else
+#        printf "%s%s" "^c$color12^$powerline_h^d^" "^c$color1^^b$color12^  $updates"
+#    fi
+#}
+
 updates() {
-    updates=$(checkupdates | wc -l)
-    if [ -z "$updates" ]; then
+    # Check if running on Ubuntu
+    if command -v lsb_release &> /dev/null && lsb_release -is | grep -q 'Ubuntu'; then
+        # Use apt for Ubuntu
+        updates=$(apt list --upgradable 2>/dev/null | grep -c 'upgradable')
+    elif command -v checkupdates &> /dev/null; then
+        # Use checkupdates for Arch Linux
+        updates=$(checkupdates | wc -l)
+    else
+        # Default message if neither command is available
+        printf "OS not supported for updates check"
+        return
+    fi
+
+    # Display the status
+    if [ "$updates" -eq 0 ]; then
         printf "^c$color12^$powerline_h^d^" "^c$color1^^b$color12^  Ok"
     else
         printf "%s%s" "^c$color12^$powerline_h^d^" "^c$color1^^b$color12^  $updates"
